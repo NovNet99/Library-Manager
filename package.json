@@ -1,0 +1,22 @@
+{
+  "name": "library-manager",
+  "version": "1.0.0",
+  "description": "Library Management Application.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NovNet99/Library-Manager.git"
+  },
+  "author": "Joel McDonald",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NovNet99/Library-Manager/issues"
+  },
+  "homepage": "https://github.com/NovNet99/Library-Manager#readme",
+  "devDependencies": {
+    "electron": "^35.0.1"
+  }
+}
