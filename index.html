@@ -1,24 +1,16 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <script defer src="./renderer.js"></script>
-    <title>Hello from Electron renderer!</title>
-  </head>
-  <body>
-    <h1>Hello from Electron renderer!</h1>
-    <p>👋</p>
-    <p id="info"></p>
-
-    Title: <input id="title" />
-    <button id="btn" type="button">Set</button>
-  </body>
+    <link rel="stylesheet" href="styles.css">
+    <title>Library Manager</title>
+</head>
+<body>
+    <h1>Library Management Software</h1>
+    <p id="versionInfo"></p>
+    <button id="enterAppBtn" class="dark-button" type="button">Enter Application</button>
+</body>
 </html>
