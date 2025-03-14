@@ -1,18 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Library Application</h1>
-    <button id="goBack" class="dark-button" type="button">Go Back</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Back Button -->
+    <div class="header-container">
+      <button id="goBack" class="back-button">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </button>
+      <h1>Library Application</h1>
+    </div>
+
+    <button id="addBookBtn" class="dark-button" type="button">Add Book</button>
+
+    <!-- The hidden form for adding a book -->
+    <div id="bookFormContainer" class="hidden">
+      <form id="bookForm">
+        <label for="bookTitle">Title:</label>
+        <input type="text" id="bookTitle" name="title" />
+
+        <label for="bookAuthor">Author:</label>
+        <input type="text" id="bookAuthor" name="author" />
+
+        <button type="button" id="saveBookBtn" class="dark-button">
+          Save Book
+        </button>
+        <button type="button" id="cancelBookBtn" class="dark-button">
+          Cancel
+        </button>
+      </form>
+    </div>
 
     <script>
-        document.getElementById('goBack').addEventListener('click', () => {
-            window.electronAPI.loadPage('index.html'); // Go back to the main page
-        });
+      // Event listener to handle the back button
+      document.getElementById("goBack").addEventListener("click", () => {
+        window.electronAPI.loadPage("index.html"); // Go back to the main page
+      });
+
+      // Event listener to handle Add Book button click
+      document.getElementById("addBookBtn").addEventListener("click", () => {
+        const bookFormContainer = document.getElementById("bookFormContainer");
+        const addBookBtn = document.getElementById("addBookBtn");
+
+        // Toggle the visibility of the book form
+        bookFormContainer.classList.toggle("hidden");
+        addBookBtn.classList.toggle("hidden");
+      });
+
+      // Event listener for the save button
+      document.getElementById("saveBookBtn").addEventListener("click", () => {
+        const title = document.getElementById("bookTitle").value;
+        const author = document.getElementById("bookAuthor").value;
+
+        if (title && author) {
+          window.electronAPI.saveBook({ title, author });
+          bookFormContainer.classList.toggle("hidden");
+          addBookBtn.classList.toggle("hidden");
+        } else {
+          alert("Please fill in both title and author!");
+        }
+      });
+
+      document.getElementById("cancelBookBtn").addEventListener("click", () => {
+        bookFormContainer.classList.toggle("hidden");
+        addBookBtn.classList.toggle("hidden");
+      });
+
+
     </script>
-</body>
+  </body>
 </html>

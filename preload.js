@@ -20,5 +20,6 @@ contextBridge.exposeInMainWorld("versions", {
 contextBridge.exposeInMainWorld("electronAPI", {
   //ipcRenderer.send('set-title', title) sends the title value to the main process.
   //The main process listens for this event and updates the window title.
-  loadPage: (file) => ipcRenderer.send("load-page", file)
+  loadPage: (file) => ipcRenderer.send("load-page", file),
+  saveBook: (book) => ipcRenderer.invoke("saveBook", book),
 });
