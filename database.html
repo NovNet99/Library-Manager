@@ -7,6 +7,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <script defer src="./database.js"></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -18,62 +19,48 @@
       <h1>Library Application</h1>
     </div>
 
-    <button id="addBookBtn" class="dark-button" type="button">Add Book</button>
+    <div id="bookList"></div>
+    <!-- Books will be displayed here -->
+
+    <div class="add-book-button-wrapper">
+      <button id="addBookBtn" class="dark-button" type="button">Add Book</button>
+    </div>
+    
 
     <!-- The hidden form for adding a book -->
-    <div id="bookFormContainer" class="hidden">
+    <div id="bookFormContainer" class="add-book-form-container hidden">
       <form id="bookForm">
-        <label for="bookTitle">Title:</label>
-        <input type="text" id="bookTitle" name="title" />
+        <div class="label-input">
+          <div class="add-book-label-wrapper">
+            <label for="bookTitle">Title:</label>
+          </div>
+          <div class="add-book-input-wrapper">
+            <input type="text" id="bookTitle" class="add-book-input" name="title" />
+          </div>
+        </div>
 
-        <label for="bookAuthor">Author:</label>
-        <input type="text" id="bookAuthor" name="author" />
+        <div class="label-input">
+          <div class="add-book-label-wrapper">
+            <label for="bookAuthor">Author:</label>
+          </div>
+          <div class="add-book-input-wrapper">
+            <input type="text" id="bookAuthor" class="add-book-input" name="author" />
+          </div>
+        </div>
 
-        <button type="button" id="saveBookBtn" class="dark-button">
-          Save Book
-        </button>
-        <button type="button" id="cancelBookBtn" class="dark-button">
-          Cancel
-        </button>
+        <div class="button-container">
+          <button type="button" id="saveBookBtn" class="dark-button option-button">
+            Save Book
+          </button>
+          <button type="button" id="cancelBookBtn" class="dark-button option-button">
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
 
-    <script>
-      // Event listener to handle the back button
-      document.getElementById("goBack").addEventListener("click", () => {
-        window.electronAPI.loadPage("index.html"); // Go back to the main page
-      });
-
-      // Event listener to handle Add Book button click
-      document.getElementById("addBookBtn").addEventListener("click", () => {
-        const bookFormContainer = document.getElementById("bookFormContainer");
-        const addBookBtn = document.getElementById("addBookBtn");
-
-        // Toggle the visibility of the book form
-        bookFormContainer.classList.toggle("hidden");
-        addBookBtn.classList.toggle("hidden");
-      });
-
-      // Event listener for the save button
-      document.getElementById("saveBookBtn").addEventListener("click", () => {
-        const title = document.getElementById("bookTitle").value;
-        const author = document.getElementById("bookAuthor").value;
-
-        if (title && author) {
-          window.electronAPI.saveBook({ title, author });
-          bookFormContainer.classList.toggle("hidden");
-          addBookBtn.classList.toggle("hidden");
-        } else {
-          alert("Please fill in both title and author!");
-        }
-      });
-
-      document.getElementById("cancelBookBtn").addEventListener("click", () => {
-        bookFormContainer.classList.toggle("hidden");
-        addBookBtn.classList.toggle("hidden");
-      });
-
-
-    </script>
+    <div id="error-message" style="color: red; display: none">
+      Please fill in both title and author!
+    </div>
   </body>
 </html>

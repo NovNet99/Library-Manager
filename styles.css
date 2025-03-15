@@ -1,91 +1,137 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
 body {
-    background-color: #2c2c2c; /* Dark grey background */
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-    text-align: center;
-    position: relative;
+  background-color: #2c2c2c; /* Dark grey background */
+  color: white;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  text-align: center;
+  position: relative;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .header-container {
-    position: absolute;
-    top: 20px; /* Adjust as needed */
-    left: 20px;
-    width: calc(100% - 40px); /* Prevents overflow */
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Pushes items apart */
+  position: absolute;
+  top: 20px; /* Adjust as needed */
+  left: 20px;
+  width: calc(100% - 40px); /* Prevents overflow */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes items apart */
 }
 
-
 h1 {
-    font-size: 2.5rem;
-    font-weight: 600;
-    position: absolute;
-    top: 10%; /* Adjust this value to move it up/down */
-    left: 50%;
-    flex-grow: 1;
-    transform: translateX(-50%);
-    text-align: center;
-    margin: 0;
-    max-width: 500%; /* Gives more leeway to the title text */
-    overflow: hidden; /* Optional: to avoid overflow if the text is too long */
- 
+  font-size: 2.5rem;
+  font-weight: 600;
+  position: absolute;
+  top: 10%; /* Adjust this value to move it up/down */
+  left: 50%;
+  flex-grow: 1;
+  transform: translateX(-50%);
+  text-align: center;
+  margin: 0;
+  max-width: 500%; /* Gives more leeway to the title text */
+  overflow: hidden; /* Optional: to avoid overflow if the text is too long */
 }
 
 #versionInfo {
-    font-size: 1rem;
-    margin-bottom: 20px;
+  font-size: 1rem;
+  margin-bottom: 20px;
 }
 
 .dark-button {
-    background-color: #1a1a1a; /* Very dark grey */
-    color: white;
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px; /* Small radius corners */
-    cursor: pointer;
-    transition: background 0.3s;
+  background-color: #1a1a1a; /* Very dark grey */
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px; /* Small radius corners */
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
 .dark-button:hover {
-    background-color: #333; /* Slightly lighter grey on hover */
+  background-color: #333; /* Slightly lighter grey on hover */
 }
 
 .back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: flex;
-    align-items: center;
-    background-color: transparent;
-    color: white;
-    font-size: 1rem;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.3s;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s;
 }
 
 .back-button:hover {
-    opacity: 0.7; /* Slight fade effect on hover */
+  opacity: 0.7; /* Slight fade effect on hover */
 }
 
 .back-button i {
-    margin-right: 8px; /* Space between icon and text */
-    font-size: 1.2rem; /* Adjust size */
+  margin-right: 8px; /* Space between icon and text */
+  font-size: 1.2rem; /* Adjust size */
+}
+
+.add-book-button-wrapper{
+    margin: 30px;
+}
+
+.add-book-form-container{
+    margin: 30px;
+    padding: 10px;
+    border: #1a1a1a;
+    border-style:dashed;
+    border-radius: 4px;
+}
+
+#bookForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Adds space between elements */
+  width: 100%; /* Adjust width as needed */
+}
+
+.label-input {
+  display: flex;
+  width: 100%;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    justify-content: space-evenly;
+    gap: 10px;
+ 
+}
+
+.option-button{
+    width: 131px;
+}
+
+.add-book-label-wrapper {
+  margin-right: 10px;
+}
+
+.add-book-input-wrapper {
+  width: 100%;
+}
+
+.add-book-input {
+  width: 100%;
+  box-sizing: border-box; /* Removes spilling of input outside of div. */
 }

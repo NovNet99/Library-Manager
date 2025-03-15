@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu } = require("electron/main");
+const { app, BrowserWindow, ipcMain, Menu, dialog } = require("electron/main");
 
 //A Node.js module used to handle and manipulate file paths.
 const path = require("node:path");
@@ -45,12 +45,14 @@ app.whenReady().then(() => {
   });
 });
 
+//Loads a different HTML file allowing view switching.
 ipcMain.on("load-page", (event, file) => {
   if (mainWindow) {
     mainWindow.loadFile(file); // Load the requested HTML file
   }
 });
 
+//Receives book data from input fields and saves it in a JSON file.
 ipcMain.handle("saveBook", async (_, book) => {
   try {
     // Check if the file exists
@@ -73,6 +75,20 @@ ipcMain.handle("saveBook", async (_, book) => {
   } catch (error) {
     console.error("Error saving book:", error);
     dialog.showErrorBox("Error", "Failed to save the book.");
+  }
+});
+
+//Gets the book data from the JSON file and returns said data to the database code.
+ipcMain.handle("getBooks", async () => {
+  try {
+    if (fs.existsSync(bookDataFilePath)) {
+      const data = fs.readFileSync(bookDataFilePath, "utf8");
+      return JSON.parse(data);
+    }
+    return []; // Return an empty array if the file doesn't exist
+  } catch (error) {
+    console.error("Error loading books:", error);
+    return [];
   }
 });
 
