@@ -1,22 +1,16 @@
-//Selects the HTML element with the ID info. 
-const information = document.getElementById('info')
+/*Realistically, the JavaScript code could (and probably should) be written here instead of within script tags in the HTML files.*/
+
+//Selects the HTML element with the ID info.
+const versionInfo = document.getElementById("versionInfo");
 //Sets its text content to display the versions of Chrome, Node.js, and Electron.
-information.innerText = `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}), and Electron (v${versions.electron()})`
+versionInfo.innerText = `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}), and Electron (v${versions.electron()})`;
 
-//Calls window.versions.ping(), which sends an IPC message to the main process.
-const func = async () => {
-  //Waits for a response ('pong') from the main process.
-  const response = await window.versions.ping()
-  //Logs 'pong' to the console.
-  console.log(response) // prints out 'pong'
-}
 
-const setButton = document.getElementById('btn')
-const titleInput = document.getElementById('title')
-setButton.addEventListener('click', () => {
-  const title = titleInput.value
-  //Sends an IPC message to the main process to change the window title.
-  window.electronAPI.setTitle(title)
-})
+//--------INDEX.HTML CODE FUNCTIONALITY--------
+const enterAppButton = document.getElementById("enterAppBtn");
 
-func()
+enterAppButton.addEventListener("click", () => {
+  //Tell the main process to load database.html
+  window.electronAPI.loadPage("database.html"); 
+});
+

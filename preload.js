@@ -4,22 +4,23 @@
 
 //ipcRenderer:
 //Allows the renderer process to send messages to the main process and receive responses.
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer } = require("electron");
 
 //Exposes the Node.js, Chrome, and Electron versions to the renderer process.
 //The renderer can now access these using window.versions.node(), window.versions.chrome(), etc.
-contextBridge.exposeInMainWorld('versions', {
+contextBridge.exposeInMainWorld("versions", {
   node: () => process.versions.node,
   chrome: () => process.versions.chrome,
   electron: () => process.versions.electron,
-  ping: () => ipcRenderer.invoke('ping')
   // we can also expose variables, not just functions
-})
+});
 
-//Allows the renderer process to send a set-title event to the main process.
-//This allows changing the window title from the renderer.
-contextBridge.exposeInMainWorld('electronAPI', {
-  //ipcRenderer.send('set-title', title) sends the title value to the main process.
-  //The main process listens for this event and updates the window title.
-  setTitle: (title) => ipcRenderer.send('set-title', title)
-})
+//Exposes these functions to the renderer allowing it to use them.
+contextBridge.exposeInMainWorld("electronAPI", {
+  //Exposes loadPage custom function that allows for changing the HTML file being rendered.
+  loadPage: (file) => ipcRenderer.send("load-page", file),
+  //Exposes save book function which allows saving of book data.
+  saveBook: (book) => ipcRenderer.invoke("saveBook", book),
+  //Exposes getBooks function that grabs book data in main.js and sends it to the database.html script code.
+  getBooks: () => ipcRenderer.invoke("getBooks"),
+});

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script defer src="./database.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <button id="goBack" class="back-button">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </button>
+      <h1>Library Application</h1>
+    </header>
+    <!-- Back Button -->
+    <div class="header-container">
+      
+      
+    </div>
+
+    <div class="scrollable-table-container">
+      <table id="bookTable" class="table-content">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody></tbody> <!-- Data will be inserted here dynamically -->
+      </table>
+    </div>
+    <!-- Books will be displayed here -->
+
+    <div class="add-book-button-wrapper">
+      <button id="addBookBtn" class="dark-button" type="button">Add Book</button>
+    </div>
+    
+
+    <!-- The hidden form for adding a book -->
+    <div id="bookFormContainer" class="add-book-form-container hidden">
+      <form id="bookForm">
+        <div class="label-input">
+          <div class="add-book-label-wrapper">
+            <label for="bookTitle">Title:</label>
+          </div>
+          <div class="add-book-input-wrapper">
+            <input type="text" id="bookTitle" class="add-book-input" name="title" />
+          </div>
+        </div>
+
+        <div class="label-input">
+          <div class="add-book-label-wrapper">
+            <label for="bookAuthor">Author:</label>
+          </div>
+          <div class="add-book-input-wrapper">
+            <input type="text" id="bookAuthor" class="add-book-input" name="author" />
+          </div>
+        </div>
+
+        <div class="button-container">
+          <button type="button" id="saveBookBtn" class="dark-button option-button">
+            Save Book
+          </button>
+          <button type="button" id="cancelBookBtn" class="dark-button option-button">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div id="error-message" style="color: red; display: none">
+      Please fill in both title and author!
+    </div>
+  </body>
+</html>
