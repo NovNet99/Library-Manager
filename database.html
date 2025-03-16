@@ -11,15 +11,30 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- Back Button -->
-    <div class="header-container">
+    <header>
       <button id="goBack" class="back-button">
         <i class="fas fa-arrow-left"></i> Go Back
       </button>
       <h1>Library Application</h1>
+    </header>
+    <!-- Back Button -->
+    <div class="header-container">
+      
+      
     </div>
 
-    <div id="bookList"></div>
+    <div class="scrollable-table-container">
+      <table id="bookTable" class="table-content">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody></tbody> <!-- Data will be inserted here dynamically -->
+      </table>
+    </div>
     <!-- Books will be displayed here -->
 
     <div class="add-book-button-wrapper">

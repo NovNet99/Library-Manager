@@ -1,21 +1,22 @@
 //--------DATABASE.HTML CODE FUNCTIONALITY--------
 // Get references to elements
 const bookFormContainer = document.getElementById("bookFormContainer");
+const backBtn = document.getElementById("goBack");
 const addBookBtn = document.getElementById("addBookBtn");
 const saveBookBtn = document.getElementById("saveBookBtn");
 const cancelBookBtn = document.getElementById("cancelBookBtn");
 const bookTitle = document.getElementById("bookTitle");
 const bookAuthor = document.getElementById("bookAuthor");
 
-document.getElementById("bookTitle").addEventListener("focus", () => {
+bookTitle.addEventListener("focus", () => {
   console.log("Title field focused");
 });
-document.getElementById("bookAuthor").addEventListener("focus", () => {
+bookAuthor.addEventListener("focus", () => {
   console.log("Author field focused");
 });
 
 // Event listener to handle the back button
-document.getElementById("goBack").addEventListener("click", () => {
+backBtn.addEventListener("click", () => {
   window.electronAPI.loadPage("index.html"); // Go back to the main page
 });
 
@@ -74,27 +75,28 @@ cancelBookBtn.addEventListener("click", () => {
   document.getElementById("error-message").style.display = "none";
 });
 
-
 const bookList = document.getElementById("bookList");
 
 //Loads saved books so user can see them on the page.
 async function loadBooks() {
   const books = await window.electronAPI.getBooks();
+  const tableBody = document.querySelector("#bookTable tbody");
 
-  //Of no books exist, displays 'No books found' text.
   if (books.length === 0) {
-    bookList.innerHTML = "<p>No books found.</p>";
+    tableBody.innerHTML = "<tr><td colspan='3'>No books found.</td></tr>";
   } else {
-    bookList.innerHTML = books
+    tableBody.innerHTML = books
       .map(
         (book, index) =>
-          `<div class="book-item">
-            <strong>${index + 1}. ${book.title}</strong> by ${book.author}
-          </div>`
+          `<tr>
+            <td>${index + 1}</td>
+            <td>${book.title}</td>
+            <td>${book.author}</td>
+          </tr>`
       )
       .join("");
   }
 }
 
 // Load books when page loads
-loadBooks();
+document.addEventListener("DOMContentLoaded", loadBooks);

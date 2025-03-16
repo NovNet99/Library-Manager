@@ -1,45 +1,55 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-color: #2c2c2c; /* Dark grey background */
   color: white;
   font-family: "Poppins", sans-serif;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+  justify-content: flex-start;
+  min-height: 100vh;
   margin: 0;
   text-align: center;
   position: relative;
+  overflow-y: auto;
 }
 
 .hidden {
   display: none;
 }
 
+header{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin: 10px;
+  padding: 10px 10px;
+}
+
 .header-container {
-  position: absolute;
-  top: 20px; /* Adjust as needed */
-  left: 20px;
-  width: calc(100% - 40px); /* Prevents overflow */
+  position: relative; /* Ensures child elements stay inside */
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Pushes items apart */
+  justify-content: space-between; /* Pushes title & button apart */
+  padding: 20px;
 }
 
 h1 {
   font-size: 2.5rem;
   font-weight: 600;
-  position: absolute;
-  top: 10%; /* Adjust this value to move it up/down */
-  left: 50%;
-  flex-grow: 1;
-  transform: translateX(-50%);
   text-align: center;
+  flex-grow: 1; /* Allows h1 to take up available space */
   margin: 0;
-  max-width: 500%; /* Gives more leeway to the title text */
-  overflow: hidden; /* Optional: to avoid overflow if the text is too long */
 }
 
 #versionInfo {
@@ -64,12 +74,11 @@ h1 {
 }
 
 .back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
   display: flex;
   align-items: center;
   background-color: transparent;
+  margin-right: auto;
+  margin-left: 20px;
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -87,16 +96,63 @@ h1 {
   font-size: 1.2rem; /* Adjust size */
 }
 
-.add-book-button-wrapper{
-    margin: 30px;
+/*------TABLE STYLING-------*/
+.scrollable-table-container{
+  height: 400px;
+  overflow-y: auto;
+  margin: 25px 0;
 }
 
-.add-book-form-container{
-    margin: 30px;
-    padding: 10px;
-    border: #1a1a1a;
-    border-style:dashed;
-    border-radius: 4px;
+
+.table-content{
+  border-collapse: collapse;
+  font-size: 1em;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.table-content thead tr{
+  background-color: #1a1a1a;
+  text-align: left;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  
+}
+
+
+.table-content th, .table-content td{
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.table-content tbody tr{
+  border-bottom: 1px solid white;
+}
+
+.table-content tbody tr:last-of-type{
+  border-bottom: 3px solid white;
+}
+
+/*.table-content tbody tr:nth-of-type(even){
+  background-color:#464646;
+
+}*/
+
+/*------ADD BOOK BUTTON AND MENU STYLING------*/
+
+.add-book-button-wrapper {
+  margin: 30px;
+}
+
+.add-book-form-container {
+  margin: 30px;
+  padding: 10px;
+  border: #1a1a1a;
+  border-style: dashed;
+  border-radius: 4px;
 }
 
 #bookForm {
@@ -112,15 +168,14 @@ h1 {
 }
 
 .button-container {
-    display: flex;
-    justify-content: space-between;
-    justify-content: space-evenly;
-    gap: 10px;
- 
+  display: flex;
+  justify-content: space-between;
+  justify-content: space-evenly;
+  gap: 10px;
 }
 
-.option-button{
-    width: 131px;
+.option-button {
+  width: 131px;
 }
 
 .add-book-label-wrapper {
@@ -135,3 +190,24 @@ h1 {
   width: 100%;
   box-sizing: border-box; /* Removes spilling of input outside of div. */
 }
+
+/*------SCROLLBAR STYLING------
+ /* width */
+ ::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+} 
