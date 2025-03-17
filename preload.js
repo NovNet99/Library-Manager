@@ -25,4 +25,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getBooks: () => ipcRenderer.invoke("getBooks"),
 
   saveUser: (user) => ipcRenderer.invoke("saveUser", user),
+
+  loginUser: (user) => ipcRenderer.invoke("loginUser", user),
 });

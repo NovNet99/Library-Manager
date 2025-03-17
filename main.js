@@ -121,6 +121,35 @@ ipcMain.handle("saveUser", async (_, user) => {
   }
 });
 
+ipcMain.handle("loginUser", async (_, user) => {
+  try {
+    let users = [];
+
+    // Load existing users
+    if (fs.existsSync(userDataFilePath)) {
+      const data = fs.readFileSync(userDataFilePath, "utf8");
+      users = JSON.parse(data);
+    }
+
+    // Find the user by username
+    const existingUser = users.find((u) => u.username === user.username);
+    if (!existingUser) {
+      return { success: false, message: "Username not found." };
+    }
+
+    // Check if passwords match
+    if (existingUser.password !== user.password) {
+      return { success: false, message: "Incorrect password." };
+    }
+
+    // Successful login
+    return { success: true, message: "Login successful." };
+  } catch (error) {
+    console.error("Error during login:", error);
+    return { success: false, message: "Error logging in." };
+  }
+});
+
 //Fires when all windows are closed.
 //On Windows & Linux, it quits the app.
 //On macOS (darwin), it doesn’t quit immediately (apps should stay open until the user explicitly quits).
