@@ -6,7 +6,7 @@ const fs = require("fs");
 const bookDataFilePath = path.join(__dirname, "books.json");
 const userDataFilePath = path.join(__dirname, "users.json");
 
-process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "production";
 const isDev = process.env.NODE_ENV !== "production";
 
 let mainWindow;
@@ -216,6 +216,13 @@ ipcMain.handle("deleteUserBook", async (_, username, book) => {
     console.error("Error deleting user book:", error);
     return { success: false, message: "Failed to delete book." };
   }
+});
+
+ipcMain.handle("show-message-box", async (_, message) => {
+  return dialog.showMessageBox({
+    message: message,
+    buttons: ["OK"],
+  });
 });
 
 

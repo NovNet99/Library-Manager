@@ -30,5 +30,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveUserBook: (username, book) => ipcRenderer.invoke("saveUserBook", username, book),
   getUserBooks: (username) => ipcRenderer.invoke("getUserBooks", username),
   deleteUserBook: (username, book) => ipcRenderer.invoke("deleteUserBook", username, book),
+  showMessageBox: (message) => ipcRenderer.invoke("show-message-box", message),
 
 });

@@ -42,22 +42,24 @@ async function loadBooks() {
 
   const saveButtons = document.querySelectorAll(".save-btn");
   saveButtons.forEach((button) => {
-  button.addEventListener("click", async (event) => {
-    const title = event.target.getAttribute("data-title");
-    const author = event.target.getAttribute("data-author");
+    button.addEventListener("click", async (event) => {
+      const title = event.target.getAttribute("data-title");
+      const author = event.target.getAttribute("data-author");
 
-    if (loggedInUser) {
-      const response = await window.electronAPI.saveUserBook(loggedInUser, { title, author });
-      alert(response.message); // Show success or duplicate message
-      if (response.success) {
-        loadUserSavedBooks(); // Reload user's saved books only if added
+      if (loggedInUser) {
+        const response = await window.electronAPI.saveUserBook(loggedInUser, {
+          title,
+          author,
+        });
+        // Show success or duplicate message
+        window.electronAPI.showMessageBox(response.message);
+        if (response.success) {
+          loadUserSavedBooks(); // Reload user's saved books only if added
+        }
       }
-    }
+    });
   });
-});
 }
-
-
 
 // Load books when page loads
 document.addEventListener("DOMContentLoaded", loadBooks);
@@ -70,7 +72,8 @@ async function loadUserSavedBooks() {
   const savedBooksTable = document.querySelector("#savedBooksTable tbody");
 
   if (savedBooks.length === 0) {
-    savedBooksTable.innerHTML = "<tr><td colspan='4'>No saved books found.</td></tr>";
+    savedBooksTable.innerHTML =
+      "<tr><td colspan='4'>No saved books found.</td></tr>";
   } else {
     savedBooksTable.innerHTML = savedBooks
       .map(
@@ -79,7 +82,9 @@ async function loadUserSavedBooks() {
             <td>${index + 1}</td>
             <td>${book.title}</td>
             <td>${book.author}</td>
-            <td><button class="delete-btn dark-button" data-title="${book.title}" data-author="${book.author}">Return</button></td>
+            <td><button class="delete-btn dark-button" data-title="${
+              book.title
+            }" data-author="${book.author}">Return</button></td>
           </tr>`
       )
       .join("");
@@ -94,7 +99,10 @@ async function loadUserSavedBooks() {
 
       if (loggedInUser) {
         // Remove the book from the logged-in user's saved books
-        const response = await window.electronAPI.deleteUserBook(loggedInUser, { title, author });
+        const response = await window.electronAPI.deleteUserBook(loggedInUser, {
+          title,
+          author,
+        });
         if (response.success) {
           loadUserSavedBooks(); // Reload user's saved books
         } else {
