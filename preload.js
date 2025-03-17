@@ -23,4 +23,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveBook: (book) => ipcRenderer.invoke("saveBook", book),
   //Exposes getBooks function that grabs book data in main.js and sends it to the database.html script code.
   getBooks: () => ipcRenderer.invoke("getBooks"),
+
+  saveUser: (user) => ipcRenderer.invoke("saveUser", user),
 });

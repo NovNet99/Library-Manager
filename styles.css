@@ -63,6 +63,7 @@ h1 {
   font-size: 1rem;
   font-weight: 600;
   padding: 10px 20px;
+  margin-top: 30px;
   border: none;
   border-radius: 4px; /* Small radius corners */
   cursor: pointer;
@@ -211,3 +212,76 @@ h1 {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 } 
+
+/*------User Sign Up Styling------*/
+.userSignUp-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px; /* Adds space between elements */
+  width: 300px; /* Adjust width as needed */
+  margin: 30px;
+  padding: 10px;
+  border: #1a1a1a;
+  border-style: dashed;
+  border-radius: 4px;
+}
+
+.userSignUpFields-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.icon-fields-wrapper{
+  display: flex;
+  justify-content: center;
+}
+.icon-fields-wrapper > div{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.icon-fields-wrapper label{
+  flex-shrink: 0;
+  height: 50px;
+  width: 50px;
+  background-color: #1a1a1a;
+  fill: white;
+  color: white;
+  border-radius: 5px 0 0 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+}
+
+.icon-fields-wrapper input{
+  box-sizing: border-box;
+  flex-grow: 1;
+  min-width: 0;
+  height: 50px;
+  padding: 1em;
+  border-radius: 0 5px 5px 0;
+  border: #1a1a1a;
+}
+
+
+a{
+  text-decoration: #1a1a1a;
+  color: greenyellow;
+}
+
+.incorrect label{
+  background-color: #f06272;
+}
+
+.incorrect input{
+  border-color: #f06272;
+}
+
+#errorMessage{
+  color: #f06272;
+}

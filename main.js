@@ -4,6 +4,7 @@ const { app, BrowserWindow, ipcMain, Menu, dialog } = require("electron/main");
 const path = require("node:path");
 const fs = require("fs");
 const bookDataFilePath = path.join(__dirname, "books.json");
+const userDataFilePath = path.join(__dirname, "users.json");
 
 process.env.NODE_ENV = "development";
 const isDev = process.env.NODE_ENV !== "production";
@@ -89,6 +90,34 @@ ipcMain.handle("getBooks", async () => {
   } catch (error) {
     console.error("Error loading books:", error);
     return [];
+  }
+});
+
+// Handle user sign-up
+ipcMain.handle("saveUser", async (_, user) => {
+  try {
+    let users = [];
+
+    // Load existing users
+    if (fs.existsSync(userDataFilePath)) {
+      const data = fs.readFileSync(userDataFilePath, "utf8");
+      users = JSON.parse(data);
+    }
+
+    // Check if username exists
+    const existingUser = users.find((u) => u.username === user.username);
+    if (existingUser) {
+      return { success: false, message: "Username already exists." };
+    }
+
+    // Save new user
+    users.push({ username: user.username, email: user.email, password: user.password });
+    fs.writeFileSync(userDataFilePath, JSON.stringify(users, null, 2));
+
+    return { success: true, message: "User registered successfully." };
+  } catch (error) {
+    console.error("Error saving user:", error);
+    return { success: false, message: "Error saving user." };
   }
 });
 
