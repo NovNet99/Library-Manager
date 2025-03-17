@@ -150,6 +150,75 @@ ipcMain.handle("loginUser", async (_, user) => {
   }
 });
 
+
+// Save the book to a specific user's saved books
+ipcMain.handle("saveUserBook", async (_, username, book) => {
+  try {
+    const userFilePath = path.join(__dirname, `${username}_books.json`);
+    let userBooks = [];
+
+    if (fs.existsSync(userFilePath)) {
+      const data = fs.readFileSync(userFilePath, "utf8");
+      userBooks = JSON.parse(data);
+    }
+
+    // Check if the book already exists
+    const bookExists = userBooks.some(
+      (savedBook) => savedBook.title === book.title && savedBook.author === book.author
+    );
+
+    if (bookExists) {
+      return { success: false, message: "Book already saved!" };
+    }
+
+    // Add the new book to the user's list
+    userBooks.push(book);
+
+    // Save the updated array to the user's file
+    fs.writeFileSync(userFilePath, JSON.stringify(userBooks, null, 2));
+
+    return { success: true, message: "Book borrowed successfully!" };
+  } catch (error) {
+    console.error("Error saving user book:", error);
+    return { success: false, message: "Failed to save book." };
+  }
+});
+
+// Get the saved books of a specific user
+ipcMain.handle("getUserBooks", async (_, username) => {
+  try {
+    const userFilePath = path.join(__dirname, `${username}_books.json`);
+    if (fs.existsSync(userFilePath)) {
+      const data = fs.readFileSync(userFilePath, "utf8");
+      return JSON.parse(data);
+    }
+    return [];
+  } catch (error) {
+    console.error("Error loading user books:", error);
+    return [];
+  }
+});
+
+// Delete a specific book from a user's saved books
+ipcMain.handle("deleteUserBook", async (_, username, book) => {
+  try {
+    const userFilePath = path.join(__dirname, `${username}_books.json`);
+    if (fs.existsSync(userFilePath)) {
+      let userBooks = JSON.parse(fs.readFileSync(userFilePath, "utf8"));
+      userBooks = userBooks.filter(
+        (savedBook) => savedBook.title !== book.title || savedBook.author !== book.author
+      );
+      fs.writeFileSync(userFilePath, JSON.stringify(userBooks, null, 2));
+      return { success: true };
+    }
+    return { success: false, message: "User's book file not found." };
+  } catch (error) {
+    console.error("Error deleting user book:", error);
+    return { success: false, message: "Failed to delete book." };
+  }
+});
+
+
 //Fires when all windows are closed.
 //On Windows & Linux, it quits the app.
 //On macOS (darwin), it doesn’t quit immediately (apps should stay open until the user explicitly quits).

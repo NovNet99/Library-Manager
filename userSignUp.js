@@ -48,7 +48,8 @@ form.addEventListener("submit", async (event) => {
     } else {
       errors.push(response.message);
       errorMessage.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
-      //window.location.href = "userlogin.html"; // Redirect to login page after sign up
+      localStorage.setItem("loggedInUser", user.username);
+      window.electronAPI.loadPage("userDatabase.html");
     }
   } else if (form.id === "userLoginForm") {
     // Get errors from the Login form validation
@@ -69,7 +70,8 @@ form.addEventListener("submit", async (event) => {
     } else {
       errors.push(response.message);
       errorMessage.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
-      //window.location.href = "welcome.html"; // Redirect to a new page after successful login
+      localStorage.setItem("loggedInUser", user.username);
+      window.electronAPI.loadPage("userDatabase.html");
     }
   }
 
