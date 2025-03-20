@@ -1,4 +1,5 @@
 const userRegisterForm = document.getElementById("userRegisterForm");
+const userLoginForm = document.getElementById("userLoginForm");
 
 const usernameInputRegister = document.getElementById("usernameInputRegister");
 const passwordInputRegister = document.getElementById("passwordInputRegister");
@@ -6,7 +7,12 @@ const repeatPasswordInputRegister = document.getElementById(
   "repeatPasswordInputRegister"
 );
 
+const usernameInputLogin = document.getElementById("usernameInputLogin");
+const passwordInputLogin = document.getElementById("passwordInputLogin");
+
 const errorMessage = document.getElementById("errorMessage");
+const errorMessageLogin = document.getElementById("errorMessageLogin");
+
 const backButton = document.getElementById("backButton");
 
 userRegisterForm.addEventListener("submit", async (event) => {
@@ -48,6 +54,43 @@ userRegisterForm.addEventListener("submit", async (event) => {
   }
 });
 
+userLoginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const usernameInputLoginValue = usernameInputLogin.value.trim();
+  const passwordInputLoginValue = passwordInputLogin.value;
+
+  let errors = [];
+
+  const user = {
+    username: usernameInputLoginValue,
+    password: passwordInputLoginValue,
+  };
+
+  errors = getRegisterErrors(
+    usernameInputLoginValue,
+    passwordInputLoginValue
+  );
+
+  if (errors.length > 0) {
+    errorMessageLogin.innerHTML = errors
+      .map((error) => `<li>${error}</li>`)
+      .join("");
+    return;
+  }
+
+  const response = await window.electronAPI.loginUser(user);
+
+  if (!response.success) {
+    errors.push(response.message);
+    errorMessageLogin.innerHTML = errors
+      .map((error) => `<li>${error}</li>`)
+      .join("");
+  } else {
+    window.electronAPI.loadPage("../userDatabase.html");
+  }
+});
+
 function getRegisterErrors(username, password) {
   let errors = [];
 
@@ -62,15 +105,26 @@ function getRegisterErrors(username, password) {
   return errors;
 }
 
-const allInputs = [
+const allRegisterInputs = [
   usernameInputRegister,
   passwordInputRegister,
   repeatPasswordInputRegister,
 ].filter((input) => input != null);
 
-allInputs.forEach((input) => {
+const allLoginInputs = [
+  usernameInputLogin,
+  passwordInputLogin,
+].filter((input) => input != null);
+
+allRegisterInputs.forEach((input) => {
   input.addEventListener("input", () => {
     errorMessage.innerText = ""; // Clear error message dynamically
+  });
+});
+
+allLoginInputs.forEach((input) => {
+  input.addEventListener("input", () => {
+    errorMessageLogin.innerText = ""; // Clear error message dynamically
   });
 });
 

@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   saveUser: (user) => ipcRenderer.invoke("saveUser", user),
 
-  loginUser: (user) => ipcRenderer.invoke("loginUser", user),
+  //loginUser: (user) => ipcRenderer.invoke("loginUser", user),
   saveUserBook: (username, book) => ipcRenderer.invoke("saveUserBook", username, book),
   getUserBooks: (username) => ipcRenderer.invoke("getUserBooks", username),
   deleteUserBook: (username, book) => ipcRenderer.invoke("deleteUserBook", username, book),
@@ -35,5 +35,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   //New Exposes
   registerUser: (userData) => ipcRenderer.invoke("register-user", userData),
+  loginUser: (userData) => ipcRenderer.invoke("login-user", userData),
 
 });

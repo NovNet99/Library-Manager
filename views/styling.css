@@ -41,7 +41,7 @@ label {
   transition: 0.5s ease-in-out;
 }
 
-#errorMessage {
+.error-message {
   color: #c22424;
   font-size: 1em;
   justify-content: center;

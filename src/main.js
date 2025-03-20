@@ -5,11 +5,13 @@ const path = require("node:path");
 const fs = require("fs");
 
 const UserManager = require("./UserManager");
+const Authenticator = require("./Authenticator");
 
 const bookDataFilePath = path.join(__dirname, "../books1.json");
 const userDataFilePath = path.join(__dirname, "../users.json");
 
 const userManager = new UserManager(userDataFilePath);
+const authenticator = new Authenticator(userDataFilePath);
 
 process.env.NODE_ENV = "development";
 const isDev = process.env.NODE_ENV !== "production";
@@ -57,6 +59,10 @@ ipcMain.handle("register-user", async (event, userData) => {
     userData.password,
     userData.repeatPassword
   );
+});
+
+ipcMain.handle("login-user", async (event, userData) => {
+  return authenticator.login(userData.username, userData.password);
 });
 
 //Loads a different HTML file allowing view switching.
@@ -138,7 +144,7 @@ ipcMain.handle("saveUser", async (_, user) => {
   }
 });
 
-ipcMain.handle("loginUser", async (_, user) => {
+/*ipcMain.handle("loginUser", async (_, user) => {
   try {
     let users = [];
 
@@ -165,7 +171,7 @@ ipcMain.handle("loginUser", async (_, user) => {
     console.error("Error during login:", error);
     return { success: false, message: "Error logging in." };
   }
-});
+});*/
 
 // Save the book to a specific user's saved books
 ipcMain.handle("saveUserBook", async (_, username, book) => {

@@ -11,10 +11,12 @@ class UserManager {
 
   //Grabs the user register data list.
   loadUsers() {
-    if (fs.existsSync(this.filePath)) {
-      return JSON.parse(fs.readFileSync(this.filePath, "utf-8"));
+    if (!fs.existsSync(this.filePath)) {
+      // If the file doesn't exist, create it with an empty array
+      fs.writeFileSync(this.filePath, JSON.stringify([]));
+      return [];
     }
-    return [];
+    return JSON.parse(fs.readFileSync(this.filePath, "utf-8"));
   }
 
   //Saves the users to the file path where user register data is stored.

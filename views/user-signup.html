@@ -25,7 +25,7 @@
       <div class="signup">
         <form id="userRegisterForm">
           <label for="signupLoginCheckbox" aria-hidden="true">Sign Up</label>
-          <label id="errorMessage"></label>
+          <p id="errorMessage" class="error-message"></p>
           <input
             type="text"
             name="txt"
@@ -49,14 +49,20 @@
       </div>
 
       <div class="login">
-        <form>
+        <form id="userLoginForm">
           <label for="signupLoginCheckbox" aria-hidden="true">Login</label>
-          <input type="text" name="txt" placeholder="User name" required="" />
+          <p id="errorMessageLogin" class="error-message"></p>
+          <input
+            type="text"
+            name="txt"
+            placeholder="User name"
+            id="usernameInputLogin"
+          />
           <input
             type="password"
             name="pswd"
             placeholder="Password"
-            required=""
+            id="passwordInputLogin"
           />
           <button>Login</button>
         </form>
