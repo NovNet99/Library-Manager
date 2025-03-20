@@ -3,10 +3,15 @@ const { app, BrowserWindow, ipcMain, Menu, dialog } = require("electron/main");
 //A Node.js module used to handle and manipulate file paths.
 const path = require("node:path");
 const fs = require("fs");
-const bookDataFilePath = path.join(__dirname, "books.json");
-const userDataFilePath = path.join(__dirname, "users.json");
 
-process.env.NODE_ENV = "production";
+const UserManager = require("./UserManager");
+
+const bookDataFilePath = path.join(__dirname, "../books1.json");
+const userDataFilePath = path.join(__dirname, "../users.json");
+
+const userManager = new UserManager(userDataFilePath);
+
+process.env.NODE_ENV = "development";
 const isDev = process.env.NODE_ENV !== "production";
 
 let mainWindow;
@@ -30,7 +35,7 @@ const createWindow = () => {
   }
 
   //Loads the index.html front end code in the created window.
-  mainWindow.loadFile("index.html");
+  mainWindow.loadFile("views/index.html");
 };
 
 //Waits until Electron has finished initializing.
@@ -44,6 +49,14 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
+});
+
+ipcMain.handle("register-user", async (event, userData) => {
+  return userManager.registerUser(
+    userData.username,
+    userData.password,
+    userData.repeatPassword
+  );
 });
 
 //Loads a different HTML file allowing view switching.
@@ -111,7 +124,11 @@ ipcMain.handle("saveUser", async (_, user) => {
     }
 
     // Save new user
-    users.push({ username: user.username, email: user.email, password: user.password });
+    users.push({
+      username: user.username,
+      email: user.email,
+      password: user.password,
+    });
     fs.writeFileSync(userDataFilePath, JSON.stringify(users, null, 2));
 
     return { success: true, message: "User registered successfully." };
@@ -150,7 +167,6 @@ ipcMain.handle("loginUser", async (_, user) => {
   }
 });
 
-
 // Save the book to a specific user's saved books
 ipcMain.handle("saveUserBook", async (_, username, book) => {
   try {
@@ -164,7 +180,8 @@ ipcMain.handle("saveUserBook", async (_, username, book) => {
 
     // Check if the book already exists
     const bookExists = userBooks.some(
-      (savedBook) => savedBook.title === book.title && savedBook.author === book.author
+      (savedBook) =>
+        savedBook.title === book.title && savedBook.author === book.author
     );
 
     if (bookExists) {
@@ -206,7 +223,8 @@ ipcMain.handle("deleteUserBook", async (_, username, book) => {
     if (fs.existsSync(userFilePath)) {
       let userBooks = JSON.parse(fs.readFileSync(userFilePath, "utf8"));
       userBooks = userBooks.filter(
-        (savedBook) => savedBook.title !== book.title || savedBook.author !== book.author
+        (savedBook) =>
+          savedBook.title !== book.title || savedBook.author !== book.author
       );
       fs.writeFileSync(userFilePath, JSON.stringify(userBooks, null, 2));
       return { success: true };
@@ -224,7 +242,6 @@ ipcMain.handle("show-message-box", async (_, message) => {
     buttons: ["OK"],
   });
 });
-
 
 //Fires when all windows are closed.
 //On Windows & Linux, it quits the app.

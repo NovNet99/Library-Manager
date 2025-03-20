@@ -15,5 +15,5 @@ enterAppButton.addEventListener("click", () => {
 });
 
 userEnterAppButton.addEventListener("click", () => {
-  window.electronAPI.loadPage("usersignup.html");
+  window.electronAPI.loadPage("views/user-signup.html");
 });

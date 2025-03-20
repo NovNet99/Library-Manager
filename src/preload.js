@@ -32,4 +32,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   deleteUserBook: (username, book) => ipcRenderer.invoke("deleteUserBook", username, book),
   showMessageBox: (message) => ipcRenderer.invoke("show-message-box", message),
 
+
+  //New Exposes
+  registerUser: (userData) => ipcRenderer.invoke("register-user", userData),
+
 });
