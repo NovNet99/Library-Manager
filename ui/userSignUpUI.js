@@ -28,6 +28,7 @@ userRegisterForm.addEventListener("submit", async (event) => {
     username: usernameInputRegisterValue,
     password: passwordInputRegisterValue,
     repeatPassword: repeatPasswordInputRegisterValue,
+    role: "student",
   };
 
   errors = getRegisterErrors(
@@ -36,9 +37,9 @@ userRegisterForm.addEventListener("submit", async (event) => {
   );
 
   if (errors.length > 0) {
-    errorMessage.innerHTML = errors
+    errorMessage.innerHTML = `<ul>${errors
       .map((error) => `<li>${error}</li>`)
-      .join("");
+      .join("")}</ul>`;
     return;
   }
 
@@ -65,6 +66,7 @@ userLoginForm.addEventListener("submit", async (event) => {
   const user = {
     username: usernameInputLoginValue,
     password: passwordInputLoginValue,
+    role: "student",
   };
 
   errors = getRegisterErrors(
@@ -83,9 +85,9 @@ userLoginForm.addEventListener("submit", async (event) => {
 
   if (!response.success) {
     errors.push(response.message);
-    errorMessageLogin.innerHTML = errors
+    errorMessageLogin.innerHTML = `<ul>${errors
       .map((error) => `<li>${error}</li>`)
-      .join("");
+      .join("")}</ul>`;
   } else {
     window.electronAPI.loadPage("../userDatabase.html");
   }

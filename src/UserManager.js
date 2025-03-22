@@ -1,10 +1,12 @@
 const fs = require("fs");
+const path = require("path");
 
 //UserManager Class
 class UserManager {
-  constructor(filePath) {
-    //Takes the file path where we want to store user register data.
-    this.filePath = filePath;
+  constructor(role) {
+    this.role = role;
+
+    this.filePath = path.join(__dirname, `../${role}s.json`); // students.json, librarians.json, admins.json;
     //Grabs the user register data list.
     this.users = this.loadUsers();
   }
@@ -30,7 +32,7 @@ class UserManager {
   }
 
   //Handles user registration logic.
-  registerUser(username, password, confirmPassword) {
+  registerUser(username, password, confirmPassword, extraData = {}) {
     if (this.isUsernameTaken(username)) {
       return { success: false, message: "Username already taken." };
     }
@@ -39,10 +41,32 @@ class UserManager {
       return { success: false, message: "Passwords do not match." };
     }
 
+    let user;
+
+    if (this.role === "student") {
+      user = {
+        username,
+        password,
+        role: "student",
+      };
+    } else if (this.role === "librarian") {
+      if (!extraData.librarianCode || extraData.librarianCode !== "LIB123") {
+        return { success: false, message: "Invalid librarian code." };
+      }
+      user = {
+        username,
+        password,
+        role: "librarian",
+        librarianCode: extraData.librarianCode,
+      };
+    } else if (this.role === "admin") {
+      user = { username, password, role: "admin" };
+    }
+
     //If checks are valid, it pushes the new user registration data to the users list and then saves that list.
-    this.users.push({ username, password });
+    this.users.push(user);
     this.saveUsers();
-    return { success: true, message: "User registered successfully!" };
+    return { success: true, message: `${this.role} registered successfully!` };
   }
 }
 

@@ -8,10 +8,7 @@ const UserManager = require("./UserManager");
 const Authenticator = require("./Authenticator");
 
 const bookDataFilePath = path.join(__dirname, "../books1.json");
-const userDataFilePath = path.join(__dirname, "../users.json");
 
-const userManager = new UserManager(userDataFilePath);
-const authenticator = new Authenticator(userDataFilePath);
 
 process.env.NODE_ENV = "development";
 const isDev = process.env.NODE_ENV !== "production";
@@ -53,16 +50,22 @@ app.whenReady().then(() => {
   });
 });
 
-ipcMain.handle("register-user", async (event, userData) => {
-  return userManager.registerUser(
-    userData.username,
-    userData.password,
-    userData.repeatPassword
-  );
-});
+ipcMain.handle(
+  "register-user",
+  async (event, { username, password, repeatPassword, role, extraData }) => {
+    const userManager = new UserManager(role);
+    return userManager.registerUser(
+      username,
+      password,
+      repeatPassword,
+      extraData
+    );
+  }
+);
 
-ipcMain.handle("login-user", async (event, userData) => {
-  return authenticator.login(userData.username, userData.password);
+ipcMain.handle("login-user", async (event, { username, password, role }) => {
+  const authenticator = new Authenticator(role);
+  return authenticator.login(username, password);
 });
 
 //Loads a different HTML file allowing view switching.

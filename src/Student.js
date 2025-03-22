@@ -1,7 +1,7 @@
-class Student {
-  constructor(name, studentId) {
-    this.name = name;
-    this.studentId = studentId;
+class Student extends User {
+  constructor(userName) {
+    this.userNameame = userName;
+    this.role = "student";
     this.borrowedBooks = [];
   }
 
@@ -14,7 +14,7 @@ class Student {
   }
 
   returnBook(book) {
-    const index = this.borrowedBooks.findIndex(b => b.isbn === book.isbn);
+    const index = this.borrowedBooks.findIndex((b) => b.isbn === book.isbn);
     if (index !== -1) {
       book.returnBook();
       this.borrowedBooks.splice(index, 1);

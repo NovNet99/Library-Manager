@@ -2,9 +2,9 @@ const UserManager = require("./UserManager");
 
 //Authenticator Class.
 class Authenticator {
-  constructor(userFile) {
+  constructor(role) {
     //Creates a UserManager object.
-    this.userManager = new UserManager(userFile);
+    this.userManager = new UserManager(role);
   }
 
   //Handles user login logic.
