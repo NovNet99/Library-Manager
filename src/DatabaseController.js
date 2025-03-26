@@ -36,6 +36,11 @@ class DatabaseController {
   searchBook(title) {
     return this.books.filter(book => book.title.toLowerCase().includes(title.toLowerCase()));
   }
+
+  getBooks() {
+    this.books = this.loadBooks(); // Reload from file
+    return this.books;
+  }
 }
 
 module.exports = DatabaseController;

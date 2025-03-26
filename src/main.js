@@ -6,8 +6,16 @@ const fs = require("fs");
 
 const UserManager = require("./UserManager");
 const Authenticator = require("./Authenticator");
+const DatabaseController = require("./DatabaseController");
+const Librarian = require("./Librarian");
+let librarian = null;
 
 const bookDataFilePath = path.join(__dirname, "../books1.json");
+
+const bookDataDir = path.dirname(bookDataFilePath);
+if (!fs.existsSync(bookDataDir)) {
+  fs.mkdirSync(bookDataDir, { recursive: true });
+}
 
 
 process.env.NODE_ENV = "development";
@@ -54,195 +62,51 @@ ipcMain.handle(
   "register-user",
   async (event, { username, password, repeatPassword, role, extraData }) => {
     const userManager = new UserManager(role);
-    return userManager.registerUser(
-      username,
-      password,
-      repeatPassword,
-      extraData
+    const regsisterData = userManager.registerUser(
+      username, password, repeatPassword, extraData
     );
+
+    if (regsisterData.success && role === "librarian") {
+      const databaseController = new DatabaseController(bookDataFilePath);
+      librarian = new Librarian(username, extraData.librarianCode, databaseController);
+    }
+
+    return regsisterData
   }
 );
 
 ipcMain.handle("login-user", async (event, { username, password, role }) => {
   const authenticator = new Authenticator(role);
-  return authenticator.login(username, password);
+  const loginData = authenticator.login(username, password);
+
+  if (loginData.success && role === "librarian") {
+    const databaseController = new DatabaseController(bookDataFilePath);
+    const librarianCode = authenticator.userManager.getLibrarianData(username).librarianCode;
+    librarian = new Librarian(username, librarianCode, databaseController);
+  }
+  return loginData;
 });
 
-//Loads a different HTML file allowing view switching.
-ipcMain.on("load-page", (event, file) => {
-  if (mainWindow) {
-    mainWindow.loadFile(file); // Load the requested HTML file
-  }
+ipcMain.handle("get-librarian-data", async (event, username) => {
+  const userManager = new UserManager("librarian");
+  return userManager.getUserData(username);
 });
 
-//Receives book data from input fields and saves it in a JSON file.
-ipcMain.handle("saveBook", async (_, book) => {
-  try {
-    // Check if the file exists
-    let books = [];
-    if (fs.existsSync(bookDataFilePath)) {
-      const data = fs.readFileSync(bookDataFilePath);
-      books = JSON.parse(data);
-    }
-
-    // Add the new book to the array
-    books.push(book);
-
-    // Save the updated array to the file
-    fs.writeFileSync(bookDataFilePath, JSON.stringify(books, null, 2));
-
-    dialog.showMessageBox({
-      message: "Book saved successfully!",
-      buttons: ["OK"],
-    });
-  } catch (error) {
-    console.error("Error saving book:", error);
-    dialog.showErrorBox("Error", "Failed to save the book.");
-  }
+ipcMain.handle("get-books", async () => {
+  if (!librarian) throw new Error("No librarian logged in");
+  const books = librarian.getBooks(); // Use the new method
+  console.log("Books returned from get-books:", books);
+  return books;
 });
 
-//Gets the book data from the JSON file and returns said data to the database code.
-ipcMain.handle("getBooks", async () => {
-  try {
-    if (fs.existsSync(bookDataFilePath)) {
-      const data = fs.readFileSync(bookDataFilePath, "utf8");
-      return JSON.parse(data);
-    }
-    return []; // Return an empty array if the file doesn't exist
-  } catch (error) {
-    console.error("Error loading books:", error);
-    return [];
-  }
+ipcMain.handle("add-book", async (event, { title, author, isbn }) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.addBook(title, author, isbn);
 });
 
-// Handle user sign-up
-ipcMain.handle("saveUser", async (_, user) => {
-  try {
-    let users = [];
-
-    // Load existing users
-    if (fs.existsSync(userDataFilePath)) {
-      const data = fs.readFileSync(userDataFilePath, "utf8");
-      users = JSON.parse(data);
-    }
-
-    // Check if username exists
-    const existingUser = users.find((u) => u.username === user.username);
-    if (existingUser) {
-      return { success: false, message: "Username already exists." };
-    }
-
-    // Save new user
-    users.push({
-      username: user.username,
-      email: user.email,
-      password: user.password,
-    });
-    fs.writeFileSync(userDataFilePath, JSON.stringify(users, null, 2));
-
-    return { success: true, message: "User registered successfully." };
-  } catch (error) {
-    console.error("Error saving user:", error);
-    return { success: false, message: "Error saving user." };
-  }
-});
-
-/*ipcMain.handle("loginUser", async (_, user) => {
-  try {
-    let users = [];
-
-    // Load existing users
-    if (fs.existsSync(userDataFilePath)) {
-      const data = fs.readFileSync(userDataFilePath, "utf8");
-      users = JSON.parse(data);
-    }
-
-    // Find the user by username
-    const existingUser = users.find((u) => u.username === user.username);
-    if (!existingUser) {
-      return { success: false, message: "Username not found." };
-    }
-
-    // Check if passwords match
-    if (existingUser.password !== user.password) {
-      return { success: false, message: "Incorrect password." };
-    }
-
-    // Successful login
-    return { success: true, message: "Login successful." };
-  } catch (error) {
-    console.error("Error during login:", error);
-    return { success: false, message: "Error logging in." };
-  }
-});*/
-
-// Save the book to a specific user's saved books
-ipcMain.handle("saveUserBook", async (_, username, book) => {
-  try {
-    const userFilePath = path.join(__dirname, `${username}_books.json`);
-    let userBooks = [];
-
-    if (fs.existsSync(userFilePath)) {
-      const data = fs.readFileSync(userFilePath, "utf8");
-      userBooks = JSON.parse(data);
-    }
-
-    // Check if the book already exists
-    const bookExists = userBooks.some(
-      (savedBook) =>
-        savedBook.title === book.title && savedBook.author === book.author
-    );
-
-    if (bookExists) {
-      return { success: false, message: "Book already saved!" };
-    }
-
-    // Add the new book to the user's list
-    userBooks.push(book);
-
-    // Save the updated array to the user's file
-    fs.writeFileSync(userFilePath, JSON.stringify(userBooks, null, 2));
-
-    return { success: true, message: "Book borrowed successfully!" };
-  } catch (error) {
-    console.error("Error saving user book:", error);
-    return { success: false, message: "Failed to save book." };
-  }
-});
-
-// Get the saved books of a specific user
-ipcMain.handle("getUserBooks", async (_, username) => {
-  try {
-    const userFilePath = path.join(__dirname, `${username}_books.json`);
-    if (fs.existsSync(userFilePath)) {
-      const data = fs.readFileSync(userFilePath, "utf8");
-      return JSON.parse(data);
-    }
-    return [];
-  } catch (error) {
-    console.error("Error loading user books:", error);
-    return [];
-  }
-});
-
-// Delete a specific book from a user's saved books
-ipcMain.handle("deleteUserBook", async (_, username, book) => {
-  try {
-    const userFilePath = path.join(__dirname, `${username}_books.json`);
-    if (fs.existsSync(userFilePath)) {
-      let userBooks = JSON.parse(fs.readFileSync(userFilePath, "utf8"));
-      userBooks = userBooks.filter(
-        (savedBook) =>
-          savedBook.title !== book.title || savedBook.author !== book.author
-      );
-      fs.writeFileSync(userFilePath, JSON.stringify(userBooks, null, 2));
-      return { success: true };
-    }
-    return { success: false, message: "User's book file not found." };
-  } catch (error) {
-    console.error("Error deleting user book:", error);
-    return { success: false, message: "Failed to delete book." };
-  }
+ipcMain.handle("remove-book", async (event, isbn) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.removeBook(isbn);
 });
 
 ipcMain.handle("show-message-box", async (_, message) => {
@@ -250,6 +114,13 @@ ipcMain.handle("show-message-box", async (_, message) => {
     message: message,
     buttons: ["OK"],
   });
+});
+
+//Loads a different HTML file allowing view switching.
+ipcMain.on("load-page", (event, file) => {
+  if (mainWindow) {
+    mainWindow.loadFile(file); // Load the requested HTML file
+  }
 });
 
 //Fires when all windows are closed.

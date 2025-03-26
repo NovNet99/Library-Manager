@@ -1,6 +1,6 @@
 const Book = require("./Book");
 
-class Librarian extends User{
+class Librarian{
   constructor(userName, librarianCode, database) {
     this.userName = userName;
     this.librarianCode = librarianCode;
@@ -19,6 +19,10 @@ class Librarian extends User{
 
   searchBook(title) {
     return this.database.searchBook(title);
+  }
+
+  getBooks() {
+    return this.database.getBooks();
   }
 }
 

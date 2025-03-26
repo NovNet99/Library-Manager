@@ -68,6 +68,10 @@ class UserManager {
     this.saveUsers();
     return { success: true, message: `${this.role} registered successfully!` };
   }
+
+  getLibrarianData(username) {
+    return this.users.find((user) => user.username === username);
+  }
 }
 
 //Export the class.

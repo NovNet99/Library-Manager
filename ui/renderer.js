@@ -11,9 +11,9 @@ const userEnterAppButton = document.getElementById("userEnterAppBtn");
 
 enterAppButton.addEventListener("click", () => {
   //Tell the main process to load database.html
-  window.electronAPI.loadPage("database.html");
+  window.electronAPI.loadPage("views/librarian-register.html");
 });
 
 userEnterAppButton.addEventListener("click", () => {
-  window.electronAPI.loadPage("views/user-signup.html");
+  window.electronAPI.loadPage("views/student-register.html");
 });

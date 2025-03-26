@@ -51,7 +51,7 @@ userRegisterForm.addEventListener("submit", async (event) => {
       .map((error) => `<li>${error}</li>`)
       .join("");
   } else {
-    window.electronAPI.loadPage("../userDatabase.html");
+    window.electronAPI.loadPage("./userDatabase.html");
   }
 });
 
@@ -89,7 +89,7 @@ userLoginForm.addEventListener("submit", async (event) => {
       .map((error) => `<li>${error}</li>`)
       .join("")}</ul>`;
   } else {
-    window.electronAPI.loadPage("../userDatabase.html");
+    window.electronAPI.loadPage("./userDatabase.html");
   }
 });
 
