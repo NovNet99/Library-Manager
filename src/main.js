@@ -95,7 +95,6 @@ ipcMain.handle("get-librarian-data", async (event, username) => {
 ipcMain.handle("get-books", async () => {
   if (!librarian) throw new Error("No librarian logged in");
   const books = librarian.getBooks(); // Use the new method
-  console.log("Books returned from get-books:", books);
   return books;
 });
 

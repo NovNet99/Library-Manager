@@ -17,7 +17,7 @@ h1{
   margin: 0;
 }
 
-/*Signup and Login Styling*/
+/*--------------------Signup and Login Styling--------------------*/
 .signup-login-wrapper {
   width: 350px;
   height: 500px;
@@ -152,7 +152,7 @@ button:hover {
   transform: scale(0.6);
 }
 
-/*Librarian Database Styling*/
+/*--------------------Librarian Database Styling--------------------*/
 body#librarianDatabaseBody {
   margin: 0;
   padding: 0;
@@ -166,21 +166,25 @@ body#librarianDatabaseBody {
 }
 
 .header-container {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
-  width: calc(100% - 20px); /* Adjust for spacing */
+  width: calc(100%); /* Adjust for spacing */
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center; /* Centers the h1 */
-  margin: 10px;
   box-sizing: border-box;
+  border-bottom: 3px solid white;
+  z-index: 10;
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+
 }
 
 .back-button.librarian-back-button {
   position: absolute;
-  left: 0; /* Adjust for spacing */
-  top: 0;
+  left: 5px; /* Adjust for spacing */
+  top: 5px;
   margin: 0px;
 }
 
@@ -193,6 +197,7 @@ body#librarianDatabaseBody {
     no-repeat center/ cover;
   border-radius: 10px;
   box-shadow: 5px 20px 50px #000;
+  margin-bottom: 50px;
 
   display: flex;
   flex-direction: column;
@@ -220,3 +225,84 @@ body#librarianDatabaseBody {
   outline: none;
   border-radius: 5px;
 }
+
+/*--------------------Librarian Database Table Styling--------------------*/
+.scrollable-table-wrapper {
+  max-height: 350px;
+  overflow-y: auto;
+  width: 80%;
+  margin: 20px;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")
+    no-repeat center/ cover;
+    border-radius: 10px 0 0 10px;
+  box-shadow: 5px 20px 100px #000;
+}
+
+.table-content {
+  min-width: 80%;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-content thead tr {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-content th {
+  font-size: 1.4em;
+  padding: 15px;
+  background: #573b8a;
+  color: #fff;
+  text-align: left;
+  position: sticky;
+  top: -1px;
+  z-index: 1;
+}
+
+
+.table-content th,
+.table-content td {
+  padding: 8px 12px;
+  text-align: left;
+  color: #fff;
+}
+
+.table-content tbody tr{
+  border-bottom: 1px solid white;
+}
+
+.table-content tbody tr:last-of-type{
+  border-bottom: 3px solid white;
+}
+
+.table-content td button {
+  width: auto;
+  padding: 5px 15px;
+  white-space: nowrap;
+  margin: 0; /* Override default button margin */
+}
+
+/*--------------------Scrollbar Styling--------------------*/
+ /* width */
+ ::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+} 
