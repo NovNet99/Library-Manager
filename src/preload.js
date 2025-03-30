@@ -42,5 +42,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   addBook: (book) => ipcRenderer.invoke("add-book", book),
   getBooks: () => ipcRenderer.invoke("get-books"),
   removeBook: (isbn) => ipcRenderer.invoke("remove-book", isbn),
+  editBook: (isbn, updatedBook) => ipcRenderer.invoke("edit-book", isbn, updatedBook),
 
 });

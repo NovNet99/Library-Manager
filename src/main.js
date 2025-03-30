@@ -98,9 +98,14 @@ ipcMain.handle("get-books", async () => {
   return books;
 });
 
-ipcMain.handle("add-book", async (event, { title, author, isbn }) => {
+ipcMain.handle("add-book", async (event, { title, author, isbn, available, genre }) => {
   if (!librarian) throw new Error("No librarian logged in");
-  return librarian.addBook(title, author, isbn);
+  return librarian.addBook(title, author, isbn, available, genre);
+});
+
+ipcMain.handle("edit-book", async (event, isbn, updatedBook) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.editBook(isbn, updatedBook);
 });
 
 ipcMain.handle("remove-book", async (event, isbn) => {

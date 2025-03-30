@@ -207,6 +207,15 @@ h2#librarianName {
   margin: 0px;
 }
 
+.confirmation-message {
+  text-align: center;
+  color: #00cc00; /* Green for success */
+  font-size: 1.2em;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+/*--------------------Add Book Menu Styling--------------------*/
 .add-book-wrapper {
   width: 280px;
   min-height:320px;
@@ -243,6 +252,51 @@ h2#librarianName {
   border: none;
   outline: none;
   border-radius: 5px;
+}
+
+.add-book-wrapper .availability-wrapper {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between elements */
+  color: #fff;
+}
+
+.add-book-wrapper .availability-wrapper label {
+  margin: 0;
+  font-size: 1em;
+}
+
+.add-book-wrapper .availability-wrapper input[type="radio"] {
+  width: auto; /* Override input width */
+  height: auto;
+  margin: 0 5px;
+  background: none; /* Remove background */
+}
+
+.add-book-wrapper .genre-wrapper {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.add-book-wrapper .genre-wrapper label {
+  margin: 0;
+  font-size: 1em;
+}
+
+.add-book-wrapper .genre-wrapper select {
+  width: 60%; /* Match input width */
+  padding: 8px;
+  background: #e0dede;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #000;
 }
 
 /*--------------------Librarian Database Table Styling--------------------*/
@@ -299,16 +353,18 @@ h2#librarianName {
 }
 
 .table-content td button {
-  width: auto;
+  width: 85px;
+  height: 30px;
   padding: 5px 15px;
   white-space: nowrap;
-  margin: 0; /* Override default button margin */
+  margin: 5px; /* Override default button margin */
 }
 
 /*--------------------Librarian Database Table Styling In Edit Mode--------------------*/
 .table-content td input {
-  width: 90%;
-  padding: 5px;
+  width: 70%;
+  padding: 8px 12px;
+  text-align: left;
   background: #e0dede;
   border: none;
   outline: none;
@@ -318,7 +374,8 @@ h2#librarianName {
 
 .table-content td select {
   width: 90%;
-  padding: 5px;
+  padding: 8px 12px;
+  text-align: left;
   background: #e0dede;
   border: none;
   outline: none;
@@ -326,16 +383,6 @@ h2#librarianName {
   color: #000;
 }
 
-.table-content td button {
-  width: auto;
-  padding: 5px 10px; /* Slightly smaller padding for edit/save buttons */
-  margin: 0 5px; /* Space between buttons */
-  background: #573b8a;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
 .table-content td button:hover {
   background: #6d44b8;

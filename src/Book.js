@@ -1,9 +1,10 @@
 class Book {
-  constructor(title, author, isbn, available = true) {
+  constructor(title, author, isbn, available, genre) {
     this.title = title;
     this.author = author;
     this.isbn = isbn;
     this.available = available;
+    this.genre = genre; 
   }
 
   borrowBook() {
