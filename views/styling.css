@@ -17,6 +17,13 @@ h1{
   margin: 0;
 }
 
+h2{
+  color: #fff;
+  font-size: 1.4em;
+  text-align: center;
+  margin: 0;
+}
+
 /*--------------------Signup and Login Styling--------------------*/
 .signup-login-wrapper {
   width: 350px;
@@ -170,7 +177,6 @@ body#librarianDatabaseBody {
   top: 0;
   left: 0;
   width: calc(100%); /* Adjust for spacing */
-  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center; /* Centers the h1 */
@@ -179,6 +185,19 @@ body#librarianDatabaseBody {
   z-index: 10;
   background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
 
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column; /* Stacks h1 and h2 vertically */
+  align-items: center; /* Centers them horizontally */
+  text-align: center; /* Ensures text itself is centered */
+}
+
+h2#librarianName {
+  color: #fff; /* Match h1 color */
+  font-size: 1.2em; /* Smaller than h1, adjust as needed */
+  margin: 5px 0 10px 0; /* Small top margin for spacing, no other margins */
 }
 
 .back-button.librarian-back-button {
@@ -284,6 +303,42 @@ body#librarianDatabaseBody {
   padding: 5px 15px;
   white-space: nowrap;
   margin: 0; /* Override default button margin */
+}
+
+/*--------------------Librarian Database Table Styling In Edit Mode--------------------*/
+.table-content td input {
+  width: 90%;
+  padding: 5px;
+  background: #e0dede;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #000; /* Black text for visibility */
+}
+
+.table-content td select {
+  width: 90%;
+  padding: 5px;
+  background: #e0dede;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #000;
+}
+
+.table-content td button {
+  width: auto;
+  padding: 5px 10px; /* Slightly smaller padding for edit/save buttons */
+  margin: 0 5px; /* Space between buttons */
+  background: #573b8a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.table-content td button:hover {
+  background: #6d44b8;
 }
 
 /*--------------------Scrollbar Styling--------------------*/

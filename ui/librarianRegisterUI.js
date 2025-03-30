@@ -13,6 +13,9 @@ const librarianCodeInputRegister = document.getElementById(
 const usernameInputLogin = document.getElementById("usernameInputLogin");
 const passwordInputLogin = document.getElementById("passwordInputLogin");
 
+usernameInputLogin.value = "Librarian0";
+passwordInputLogin.value = "password";
+
 const errorMessage = document.getElementById("errorMessage");
 const errorMessageLogin = document.getElementById("errorMessageLogin");
 
@@ -59,6 +62,7 @@ userRegisterForm.addEventListener("submit", async (event) => {
   } else {
     localStorage.setItem("librarianUsername", usernameInputRegisterValue);
     localStorage.setItem("librarianCode", librarianCodeInputRegisterValue);
+    console.log(localStorage.getItem("librarianUsername"));
     window.electronAPI.loadPage("views/librarian-database.html");
   }
 });
@@ -95,6 +99,7 @@ userLoginForm.addEventListener("submit", async (event) => {
       .join("")}</ul>`;
   } else {
     localStorage.setItem("librarianUsername", usernameInputLoginValue);
+    console.log(localStorage.getItem("librarianUsername"));
     const librarianDataResponse = window.electronAPI.getLibrarianData(usernameInputLoginValue);
     if (librarianDataResponse.success) {
       localStorage.setItem("librarianCode", librarianDataResponse.librarianCode);

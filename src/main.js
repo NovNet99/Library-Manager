@@ -89,7 +89,7 @@ ipcMain.handle("login-user", async (event, { username, password, role }) => {
 
 ipcMain.handle("get-librarian-data", async (event, username) => {
   const userManager = new UserManager("librarian");
-  return userManager.getUserData(username);
+  return userManager.getLibrarianData(username);
 });
 
 ipcMain.handle("get-books", async () => {
