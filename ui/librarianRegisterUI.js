@@ -99,7 +99,6 @@ userLoginForm.addEventListener("submit", async (event) => {
       .join("")}</ul>`;
   } else {
     localStorage.setItem("librarianUsername", usernameInputLoginValue);
-    console.log(localStorage.getItem("librarianUsername"));
     const librarianDataResponse = window.electronAPI.getLibrarianData(usernameInputLoginValue);
     if (librarianDataResponse.success) {
       localStorage.setItem("librarianCode", librarianDataResponse.librarianCode);

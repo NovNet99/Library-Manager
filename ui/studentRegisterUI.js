@@ -10,6 +10,9 @@ const repeatPasswordInputRegister = document.getElementById(
 const usernameInputLogin = document.getElementById("usernameInputLogin");
 const passwordInputLogin = document.getElementById("passwordInputLogin");
 
+usernameInputLogin.value = "Student0";
+passwordInputLogin.value = "password";
+
 const errorMessage = document.getElementById("errorMessage");
 const errorMessageLogin = document.getElementById("errorMessageLogin");
 
@@ -51,7 +54,8 @@ userRegisterForm.addEventListener("submit", async (event) => {
       .map((error) => `<li>${error}</li>`)
       .join("");
   } else {
-    window.electronAPI.loadPage("./userDatabase.html");
+    localStorage.setItem("studentUsername", usernameInputRegisterValue);
+    window.electronAPI.loadPage("views/student-database.html");
   }
 });
 
@@ -89,7 +93,8 @@ userLoginForm.addEventListener("submit", async (event) => {
       .map((error) => `<li>${error}</li>`)
       .join("")}</ul>`;
   } else {
-    window.electronAPI.loadPage("./userDatabase.html");
+    localStorage.setItem("studentUsername", usernameInputLoginValue);
+    window.electronAPI.loadPage("views/student-database.html");
   }
 });
 

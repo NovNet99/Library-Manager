@@ -355,7 +355,6 @@ h2#librarianName {
 .table-content td button {
   width: 85px;
   height: 30px;
-  padding: 5px 15px;
   white-space: nowrap;
   margin: 5px; /* Override default button margin */
 }
@@ -386,6 +385,62 @@ h2#librarianName {
 
 .table-content td button:hover {
   background: #6d44b8;
+}
+
+/*--------------------Student Database Styling--------------------*/
+body#studentDatabaseBody {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: "Jost", sans-serif;
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+.header-container {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: calc(100%); /* Adjust for spacing */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centers the h1 */
+  box-sizing: border-box;
+  border-bottom: 3px solid white;
+  z-index: 10;
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column; /* Stacks h1 and h2 vertically */
+  align-items: center; /* Centers them horizontally */
+  text-align: center; /* Ensures text itself is centered */
+}
+
+h2#studentName {
+  color: #fff; /* Match h1 color */
+  font-size: 1.2em; /* Smaller than h1, adjust as needed */
+  margin: 5px 0 10px 0; /* Small top margin for spacing, no other margins */
+}
+
+.back-button.student-back-button {
+  position: absolute;
+  left: 5px; /* Adjust for spacing */
+  top: 5px;
+  margin: 0px;
+}
+
+.confirmation-message {
+  text-align: center;
+  color: #00cc00; /* Green for success */
+  font-size: 1.2em;
+  margin: 10px 0;
+  padding: 10px;
 }
 
 /*--------------------Scrollbar Styling--------------------*/

@@ -29,6 +29,10 @@ class Librarian {
     // Remove the old book using the original ISBN
     return this.database.updateBook(originalIsbn, updatedBook);
   }
+
+  getAllRequests() {
+    return JSON.parse(fs.readFileSync(path.join(__dirname, "../requests.json")));
+  }
 }
 
 module.exports = Librarian;

@@ -80,6 +80,11 @@ class DatabaseController {
     this.books = this.loadBooks(); // Reload from file
     return this.books;
   }
+
+  getBookByIsbn(isbn) {
+    const books = this.getBooks();
+    return books.find((book) => book.isbn === isbn);
+  }
 }
 
 module.exports = DatabaseController;
