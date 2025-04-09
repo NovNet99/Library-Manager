@@ -33,6 +33,7 @@ class DatabaseController {
     }
     this.books.push(bookInstance);
     this.saveBooks();
+    return { success: true, message: "Book added successfully." };
   }
 
   removeBook(isbn) {
@@ -43,6 +44,32 @@ class DatabaseController {
       return { success: true, message: "Book removed successfully." };
     }
     return { success: false, message: "Book not found." };
+  }
+
+  updateBook(originalIsbn, updatedBook) {
+    const index = this.books.findIndex(b => b.isbn === originalIsbn);
+    if (index === -1) {
+      return { success: false, message: "Book not found." };
+    }
+  
+    // Check if the new ISBN is already taken by another book
+    if (updatedBook.isbn !== originalIsbn) {
+      const existingBook = this.books.find(b => b.isbn === updatedBook.isbn);
+      if (existingBook) {
+        return { success: false, message: "Another book with this ISBN already exists." };
+      }
+    }
+  
+    // Replace the old book with a new Book instance at the same position
+    this.books[index] = new Book(
+      updatedBook.title,
+      updatedBook.author,
+      updatedBook.isbn,
+      updatedBook.available,
+      updatedBook.genre
+    );
+    this.saveBooks();
+    return { success: true, message: "Book updated successfully." };
   }
 
   searchBook(title) {
