@@ -168,7 +168,11 @@ ipcMain.handle("request-book", async (_, isbn) => {
   const result = student.requestBook(isbn);
   if (result.success) {
     const requests = JSON.parse(fs.readFileSync(requestsFilePath));
-    requests[student.userName] = student.getRequests();
+    requests[student.userName] = requests[student.userName] || [];
+    // Only add the new request if it’s not already there
+    if (!requests[student.userName].some((req) => req.isbn === isbn)) {
+      requests[student.userName] = student.getRequests();
+    }
     fs.writeFileSync(requestsFilePath, JSON.stringify(requests, null, 2));
   }
   return result;
@@ -177,6 +181,20 @@ ipcMain.handle("request-book", async (_, isbn) => {
 ipcMain.handle("get-all-requests", async () => {
   if (!librarian) throw new Error("No librarian logged in");
   return JSON.parse(fs.readFileSync(requestsFilePath));
+});
+
+ipcMain.handle("unrequest-book", async (event, isbn) => {
+  if (!student) throw new Error("No student logged in");
+  student.requests = student.requests.filter((req) => req.isbn !== isbn);
+  const requests = JSON.parse(fs.readFileSync(requestsFilePath));
+  requests[student.userName] = student.getRequests();
+  fs.writeFileSync(requestsFilePath, JSON.stringify(requests, null, 2));
+  return { success: true, message: "Book request removed." };
+});
+
+ipcMain.handle("get-student-requests", async (event, username) => {
+  const requests = JSON.parse(fs.readFileSync(requestsFilePath));
+  return requests[username] || [];
 });
 
 

@@ -1,10 +1,22 @@
+const fs = require("fs");
+const path = require("path");
+
 class Student{
   constructor(userName, database) {
     this.userName = userName;
     this.role = "student";
     this.borrowedBooks = [];
-    this.requests = []; // New array for book requests
+    this.requests = this.loadRequests(); // New array for book requests
     this.database = database;
+  }
+
+  loadRequests() {
+    const requestsFilePath = path.join(__dirname, "../requests.json");
+    if (fs.existsSync(requestsFilePath)) {
+      const requests = JSON.parse(fs.readFileSync(requestsFilePath, "utf-8"));
+      return requests[this.userName] || [];
+    }
+    return [];
   }
 
   requestBook(isbn) {

@@ -443,6 +443,71 @@ h2#studentName {
   padding: 10px;
 }
 
+/*--------------------Student Database Request Book Styling--------------------*/
+.requested-books-list {
+  width: 80%;
+  margin: 20px;
+  margin-bottom: 50px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent white for contrast */
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
+  max-height: 280px; /* Fixed height for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.requested-book-item {
+  display: grid; /* Changed to grid for equal columns */
+  grid-template-columns: 1fr 100px; /* Equal width: flexible details, fixed button width */
+  align-items: center; /* Vertically center content */
+  padding: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.requested-book-item:last-child {
+  border-bottom: none;
+}
+
+.book-details {
+  color: #fff;
+  font-size: 1em;
+}
+
+.book-details p {
+  margin: 5px 0;
+}
+
+.book-details strong {
+  color: #ddd; /* Slightly lighter for emphasis */
+}
+
+.requested-book-item button {
+  width: 100px;
+  height: 35px;
+  background: #cc0000; /* Red for unrequest */
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+}
+
+.requested-book-item button:hover {
+  background: #ff3333; /* Lighter red on hover */
+}
+
+/* Adjust table button styling for "Requested" text */
+.table-content td button {
+  width: 85px;
+  height: 30px;
+  white-space: nowrap;
+  margin: 5px;
+  font-size: 0.85em; /* Reduced font size to prevent overflow */
+}
+
 /*--------------------Scrollbar Styling--------------------*/
  /* width */
  ::-webkit-scrollbar {

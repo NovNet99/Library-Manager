@@ -33,5 +33,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   /*--------------------FUNCTIONS RELATED TO BOOK BORROWING MANAGEMENT--------------------*/
   requestBook: (isbn) => ipcRenderer.invoke("request-book", isbn),
   getAllRequests: () => ipcRenderer.invoke("get-all-requests"),
+  unrequestBook: (isbn) => ipcRenderer.invoke("unrequest-book", isbn),
+  getStudentRequests: (username) => ipcRenderer.invoke("get-student-requests", username),
 
 });
