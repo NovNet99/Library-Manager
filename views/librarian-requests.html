@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styling.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <script defer src="../ui/librarianRequestsUI.js"></script>
+  <title>Librarian Requests</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet" />
+</head>
+<body id="librarianRequestsBody">
+  <div class="header-container">
+    <button id="backButton" class="back-button librarian-back-button">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="header-text">
+      <h1>Manage Student Requests</h1>
+      <h2 id="librarianName"></h2>
+    </div>
+  </div>
+
+  <p id="confirmationMessage" class="confirmation-message"></p>
+
+  <div class="due-date-wrapper">
+    <label for="dueDate">Set Due Date:</label>
+    <input type="date" id="dueDate" name="dueDate" />
+  </div>
+
+  <div id="requestsList" class="requests-list"></div>
+</body>
+</html>
