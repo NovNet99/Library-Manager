@@ -445,15 +445,13 @@ h2#studentName {
 
 /*--------------------Student Database Request Book Styling--------------------*/
 .requested-books-list {
-  width: 80%;
-  margin: 20px;
-  margin-bottom: 50px;
+  width: 100%; /* Adjusted to fit within section */
   padding: 15px;
-  background: rgba(255, 255, 255, 0.1); /* Semi-transparent white for contrast */
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   box-shadow: 5px 20px 50px #000;
-  max-height: 280px; /* Fixed height for scrolling */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .requested-book-item {
@@ -506,6 +504,185 @@ h2#studentName {
   white-space: nowrap;
   margin: 5px;
   font-size: 0.85em; /* Reduced font size to prevent overflow */
+}
+
+.list-section {
+  width: 80%;
+  margin: 20px;
+}
+
+.list-section h3 {
+  color: #fff;
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+  text-align: left;
+}
+
+/*--------------------Student Database Borrowed Books Styling--------------------*/
+.borrowed-books-list {
+  width: 100%; /* Adjusted to fit within section */
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.borrowed-book-item {
+  display: grid;
+  grid-template-columns: 1fr 100px; /* Same as requested, but no button */
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.borrowed-book-item:last-child {
+  border-bottom: none;
+}
+
+.borrowed-book-item .book-details {
+  color: #fff;
+  font-size: 1em;
+}
+
+.borrowed-book-item .book-details p {
+  margin: 5px 0;
+}
+
+.borrowed-book-item .book-details strong {
+  color: #ddd;
+}
+
+.list-section {
+  width: 80%;
+  margin: 20px;
+}
+
+.list-section h3 {
+  color: #fff;
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+  text-align: left;
+}
+
+/*--------------------Librarian Requests Styling--------------------*/
+body#librarianRequestsBody {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  font-family: "Jost", sans-serif;
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+.due-date-wrapper {
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.due-date-wrapper label {
+  font-size: 1.2em;
+}
+
+.due-date-wrapper input[type="date"] {
+  padding: 8px;
+  background: #e0dede;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #000;
+}
+
+.requests-list {
+  width: 80%;
+  margin: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.request-section {
+  margin-bottom: 20px;
+}
+
+.request-section h3 {
+  color: #fff;
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+}
+
+.request-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.request-item {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.request-item:last-child {
+  border-bottom: none;
+}
+
+.request-details {
+  color: #fff;
+  font-size: 1em;
+}
+
+.request-details p {
+  margin: 5px 0;
+}
+
+.request-details strong {
+  color: #ddd;
+}
+
+.request-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.request-actions button {
+  width: 90px;
+  height: 35px;
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+}
+
+.request-actions button:first-child {
+  background: #00cc00; /* Green for Approve */
+}
+
+.request-actions button:first-child:hover {
+  background: #00e600;
+}
+
+.request-actions button:last-child {
+  background: #cc0000; /* Red for Decline */
+}
+
+.request-actions button:last-child:hover {
+  background: #ff3333;
 }
 
 /*--------------------Scrollbar Styling--------------------*/

@@ -14,6 +14,8 @@ const bookGenre = document.getElementById("genreSelect");
 
 const errorMessage = document.getElementById("errorMessage");
 
+const manageRequestsButton = document.getElementById("manageRequestsButton");
+
 //Table Body
 const booksTableBody = document.getElementById("booksTableBody");
 
@@ -290,6 +292,10 @@ backButton.addEventListener("click", () => {
   localStorage.removeItem("librarianCode");
   console.log(localStorage.getItem("librarianUsername"));
   window.electronAPI.loadPage("views/librarian-register.html");
+});
+
+manageRequestsButton.addEventListener("click", () => {
+  window.electronAPI.loadPage("views/librarian-requests.html");
 });
 
 function showConfirmation(message, errorCode) {

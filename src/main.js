@@ -19,6 +19,7 @@ let student = null;
 //The path to the JSON file where book data is stored.
 const bookDataFilePath = path.join(__dirname, "../books1.json");
 const requestsFilePath = path.join(__dirname, "../requests.json");
+const borrowedBooksFilePath = path.join(__dirname, "../borrowedBooks.json");
 
 const ensureFileExists = (filePath, defaultContent) => {
   if (!fs.existsSync(filePath)) {
@@ -28,6 +29,7 @@ const ensureFileExists = (filePath, defaultContent) => {
 
 ensureFileExists(bookDataFilePath, []);
 ensureFileExists(requestsFilePath, {});
+ensureFileExists(borrowedBooksFilePath, {});
 
 //Checks if the file exists. If not, it creates an empty JSON file.
 const bookDataDir = path.dirname(bookDataFilePath);
@@ -163,40 +165,40 @@ ipcMain.handle("show-message-box", async (_, message) => {
 });
 
 /*--------------------FUNCTIONS RELATED TO BOOK BORROWING--------------------*/
-ipcMain.handle("request-book", async (_, isbn) => {
+ipcMain.handle("request-book", async (event, isbn) => {
   if (!student) throw new Error("No student logged in");
-  const result = student.requestBook(isbn);
-  if (result.success) {
-    const requests = JSON.parse(fs.readFileSync(requestsFilePath));
-    requests[student.userName] = requests[student.userName] || [];
-    // Only add the new request if it’s not already there
-    if (!requests[student.userName].some((req) => req.isbn === isbn)) {
-      requests[student.userName] = student.getRequests();
-    }
-    fs.writeFileSync(requestsFilePath, JSON.stringify(requests, null, 2));
-  }
-  return result;
+  return student.requestBook(isbn);
 });
 
 ipcMain.handle("get-all-requests", async () => {
   if (!librarian) throw new Error("No librarian logged in");
-  return JSON.parse(fs.readFileSync(requestsFilePath));
+  return librarian.getAllRequests();
 });
 
 ipcMain.handle("unrequest-book", async (event, isbn) => {
   if (!student) throw new Error("No student logged in");
-  student.requests = student.requests.filter((req) => req.isbn !== isbn);
-  const requests = JSON.parse(fs.readFileSync(requestsFilePath));
-  requests[student.userName] = student.getRequests();
-  fs.writeFileSync(requestsFilePath, JSON.stringify(requests, null, 2));
-  return { success: true, message: "Book request removed." };
+  return student.unrequestBook(isbn);
 });
 
 ipcMain.handle("get-student-requests", async (event, username) => {
-  const requests = JSON.parse(fs.readFileSync(requestsFilePath));
-  return requests[username] || [];
+  if (!student || student.userName !== username) throw new Error("No matching student logged in");
+  return student.getStudentRequests();
 });
 
+ipcMain.handle("approve-request", async (event, { username, isbn, dueDate }) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.approveRequest(username, isbn, dueDate);
+});
+
+ipcMain.handle("decline-request", async (event, { username, isbn }) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.declineRequest(username, isbn);
+});
+
+ipcMain.handle("get-borrowed-books", async (event, username) => {
+  if (!student || student.userName !== username) throw new Error("No matching student logged in");
+  return student.getBorrowedBooks();
+});
 
 
 //Fires when all windows are closed.

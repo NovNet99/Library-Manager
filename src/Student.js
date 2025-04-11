@@ -1,37 +1,103 @@
 const fs = require("fs");
 const path = require("path");
 
-class Student{
+class Student {
   constructor(userName, database) {
     this.userName = userName;
     this.role = "student";
     this.borrowedBooks = [];
-    this.requests = this.loadRequests(); // New array for book requests
     this.database = database;
+    this.requestsFilePath = path.join(__dirname, "../requests.json");
+    this.borrowedBooksFilePath = path.join(__dirname, "../borrowedBooks.json");
+    this.requests = this.loadRequests(); // Ensure this runs last to sync with file
   }
 
   loadRequests() {
-    const requestsFilePath = path.join(__dirname, "../requests.json");
-    if (fs.existsSync(requestsFilePath)) {
-      const requests = JSON.parse(fs.readFileSync(requestsFilePath, "utf-8"));
-      return requests[this.userName] || [];
+    try {
+      if (fs.existsSync(this.requestsFilePath)) {
+        const fileContent = fs.readFileSync(this.requestsFilePath, "utf-8");
+        if (!fileContent.trim()) {
+          fs.writeFileSync(this.requestsFilePath, JSON.stringify({}, null, 2));
+          return [];
+        }
+        const requests = JSON.parse(fileContent);
+        return requests[this.userName] || [];
+      } else {
+        fs.writeFileSync(this.requestsFilePath, JSON.stringify({}, null, 2));
+        return [];
+      }
+    } catch (error) {
+      console.error(`Error loading requests for ${this.userName}:`, error.message);
+      fs.writeFileSync(this.requestsFilePath, JSON.stringify({}, null, 2)); // Reset on error
+      return [];
     }
-    return [];
   }
 
   requestBook(isbn) {
-    const book = this.database.getBookByIsbn(isbn); // Assume this method exists
-    if (!book) {
-      return { success: false, message: "Book not found." };
+    try {
+      const book = this.database.getBookByIsbn(isbn);
+      if (!book) return { success: false, message: "Book not found." };
+      if (!book.available) return { success: false, message: "Book is not available." };
+      if (this.requests.some((req) => req.isbn === isbn)) return { success: false, message: "Book already requested." };
+      
+      const request = { isbn, title: book.title, requestedAt: new Date().toISOString() };
+      this.requests.push(request);
+
+      // Persist to requests.json
+      const requests = fs.existsSync(this.requestsFilePath)
+        ? JSON.parse(fs.readFileSync(this.requestsFilePath, "utf-8"))
+        : {};
+      requests[this.userName] = this.requests;
+      fs.writeFileSync(this.requestsFilePath, JSON.stringify(requests, null, 2));
+
+      return { success: true, message: `Requested ${book.title} successfully.` };
+    } catch (error) {
+      console.error(`Error requesting book ${isbn} for ${this.userName}:`, error.message);
+      return { success: false, message: "Failed to request book." };
     }
-    if (!book.available) {
-      return { success: false, message: "Book is not available." };
+  }
+
+  unrequestBook(isbn) {
+    try {
+      const initialLength = this.requests.length;
+      this.requests = this.requests.filter((req) => req.isbn !== isbn);
+      if (this.requests.length < initialLength) {
+        const requests = JSON.parse(fs.readFileSync(this.requestsFilePath));
+        requests[this.userName] = this.requests;
+        fs.writeFileSync(this.requestsFilePath, JSON.stringify(requests, null, 2));
+        return { success: true, message: "Book request removed." };
+      }
+      return { success: false, message: "Book was not requested." };
+    } catch (error) {
+      console.error("Error removing request:", error.message);
+      return { success: false, message: "Failed to remove request." };
     }
-    if (this.requests.some((req) => req.isbn === isbn)) {
-      return { success: false, message: "Book already requested." };
+  }
+
+  getStudentRequests() {
+    try {
+      const requests = this.requests;
+      const books = this.database.getBooks();
+      return requests.map((req) => {
+        const book = books.find((b) => b.isbn === req.isbn) || {};
+        return { ...req, author: book.author, genre: book.genre };
+      });
+    } catch (error) {
+      console.error(`Error fetching requests for ${this.userName}:`, error.message);
+      return [];
     }
-    this.requests.push({ isbn, title: book.title, requestedAt: new Date().toISOString() });
-    return { success: true, message: `Requested ${book.title} successfully.` };
+  }
+
+  getBorrowedBooks() {
+    try {
+      const borrowedBooks = fs.existsSync(this.borrowedBooksFilePath)
+        ? JSON.parse(fs.readFileSync(this.borrowedBooksFilePath, "utf-8"))
+        : {};
+      return borrowedBooks[this.userName] || [];
+    } catch (error) {
+      console.error(`Error fetching borrowed books for ${this.userName}:`, error.message);
+      return [];
+    }
   }
 
   borrowBook(book) {

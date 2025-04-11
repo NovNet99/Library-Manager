@@ -35,5 +35,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getAllRequests: () => ipcRenderer.invoke("get-all-requests"),
   unrequestBook: (isbn) => ipcRenderer.invoke("unrequest-book", isbn),
   getStudentRequests: (username) => ipcRenderer.invoke("get-student-requests", username),
+  approveRequest: (data) => ipcRenderer.invoke("approve-request", data),
+  declineRequest: (data) => ipcRenderer.invoke("decline-request", data),
+  getBorrowedBooks: (username) => ipcRenderer.invoke("get-borrowed-books", username),
 
 });
