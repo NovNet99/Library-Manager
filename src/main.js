@@ -37,7 +37,7 @@ if (!fs.existsSync(bookDataDir)) {
   fs.mkdirSync(bookDataDir, { recursive: true });
 }
 
-process.env.NODE_ENV = "production";
+process.env.NODE_ENV = "development";
 const isDev = process.env.NODE_ENV !== "production";
 
 let mainWindow;
@@ -228,6 +228,52 @@ ipcMain.handle("get-due-date-status", async (_, username) => {
 ipcMain.handle("get-fines", async (_, username) => {
   if (!student || student.userName !== username) throw new Error("No matching student logged in");
   return student.getFines();
+});
+
+
+
+
+/*--------------------FUNCTIONS RELATED TO LIBRARIAN FINE HANDLING AND BOOK RETURNS--------------------*/
+ipcMain.handle('get-all-borrowed-books-with-fines', async () => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.getAllBorrowedBooksWithFines();
+});
+
+ipcMain.handle('confirm-book-return', async (event, { username, isbn }) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.confirmBookReturn({ username, isbn });
+});
+
+ipcMain.handle('confirm-payment', async (event, { username, isbn }) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.confirmPayment({ username, isbn });
+});
+
+ipcMain.handle('confirm-payment-and-return', async (event, { username, isbn }) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.confirmPaymentAndReturn({ username, isbn });
+});
+
+
+
+ipcMain.handle("get-all-students", async () => {
+  try {
+    if (!librarian) throw new Error("Librarian instance not initialized");
+    return await librarian.getAllStudents();
+  } catch (error) {
+    console.error("IPC get-all-students error:", error.message);
+    throw error;
+  }
+});
+
+ipcMain.handle("issue-book", async (event, { username, isbn, dueDate }) => {
+  try {
+    if (!librarian) throw new Error("Librarian instance not initialized");
+    return await librarian.issueBook({ username, isbn, dueDate });
+  } catch (error) {
+    console.error("IPC issue-book error:", error.message);
+    throw error;
+  }
 });
 
 

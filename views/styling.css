@@ -710,8 +710,8 @@ h2#studentName {
 
 .borrowed-book-item {
   display: grid;
-  grid-template-columns: 1fr 100px; /* Same as requested, but no button */
-  align-items: center;
+  grid-template-columns: 1fr auto; /* Left details take space, right status/fines shrink to fit */
+  align-items: start; /* Align content at the top */
   padding: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
@@ -734,16 +734,30 @@ h2#studentName {
   color: #ddd;
 }
 
-.list-section {
-  width: 80%;
-  margin: 20px;
+.borrowed-book-item .status-fines {
+  text-align: right; /* Right-align status and fine */
+  color: #fff;
+  font-size: 1em;
 }
 
-.list-section h3 {
-  color: #fff;
-  font-size: 1.5em;
-  margin: 0 0 10px 0;
-  text-align: left;
+.borrowed-book-item .status-fines p {
+  margin: 5px 0;
+}
+
+.borrowed-book-item .status-fines .overdue-status strong {
+  color: #ddd; /* Match book-details strong */
+}
+
+.borrowed-book-item .status-fines .book-fine {
+  color: #fff; /* White by default, overridden for overdue */
+}
+
+.borrowed-book-item .status-fines .book-fine.overdue {
+  color: red; /* Red if fine > 0 */
+}
+
+.borrowed-book-item .status-fines .book-fine strong {
+  color: #ddd;
 }
 
 
@@ -865,6 +879,223 @@ body#librarianRequestsBody {
 
 .request-actions button:last-child:hover {
   background: #ff3333;
+}
+
+/*--------------------Librarian Borrowed Books Styling--------------------*/
+body#librarianBorrowedBooksBody {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  font-family: "Jost", sans-serif;
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+.borrowed-books-list {
+  width: 80%;
+  margin: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.borrowed-section {
+  margin-bottom: 20px;
+}
+
+.borrowed-section h3 {
+  color: #fff;
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+}
+
+.borrowed-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.borrowed-item {
+  display: grid;
+  grid-template-columns: 1fr 300px; /* Details on left, actions on right */
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.borrowed-item:last-child {
+  border-bottom: none;
+}
+
+.borrowed-details {
+  color: #fff;
+  font-size: 1em;
+}
+
+.borrowed-details p {
+  margin: 5px 0;
+}
+
+.borrowed-details strong {
+  color: #ddd;
+}
+
+.borrowed-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* Allow buttons to wrap if needed */
+}
+
+.borrowed-actions button {
+  width: 90px;
+  height: 35px;
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+}
+
+.borrowed-actions button:nth-child(1) {
+  background: #00cc00; /* Green for Confirm Return */
+}
+
+.borrowed-actions button:nth-child(1):hover {
+  background: #00e600;
+}
+
+.borrowed-actions button:nth-child(2) {
+  background: #ff9900; /* Orange for Confirm Payment */
+}
+
+.borrowed-actions button:nth-child(2):hover {
+  background: #ffbb33;
+}
+
+.borrowed-actions button:nth-child(3) {
+  background: #0066cc; /* Blue for Confirm Payment & Return */
+}
+
+.borrowed-actions button:nth-child(3):hover {
+  background: #0088ff;
+}
+
+/* Style for management buttons in librarianDatabase */
+.management-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.management-buttons button {
+  width: 200px;
+  height: 40px;
+  background: #573b8a;
+}
+
+.management-buttons button:hover {
+  background: #6d44b8;
+}
+
+/* Librarian Issue Book Styling */
+body#librarianIssueBookBody {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  font-family: "Jost", sans-serif;
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+.issue-book-form {
+  width: 80%;
+  max-width: 500px;
+  margin: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
+  color: #fff;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group select,
+.form-group input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background: #333;
+  color: #fff;
+  font-size: 1em;
+}
+
+.form-group select:focus,
+.form-group input[type="date"]:focus {
+  outline: none;
+  background: #444;
+}
+
+.issue-book-form button {
+  width: 100%;
+  height: 40px;
+  background: #573b8a;
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+}
+
+.issue-book-form button:hover {
+  background: #6d44b8;
+}
+
+/* Ensure management-buttons style supports three buttons */
+.management-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+.management-buttons button {
+  width: 180px;
+  height: 40px;
+  background: #573b8a;
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+}
+
+.management-buttons button:hover {
+  background: #6d44b8;
 }
 
 /*--------------------Scrollbar Styling--------------------*/

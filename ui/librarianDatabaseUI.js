@@ -22,6 +22,8 @@ const searchErrorMessage = document.getElementById("searchErrorMessage");
 const clearSearchButton = document.getElementById("clearSearchButton");
 
 const manageRequestsButton = document.getElementById("manageRequestsButton");
+const manageBorrowedBooksButton = document.getElementById("manageBorrowedBooksButton");
+const issueBookButton = document.getElementById("issueBookButton");
 
 // Table Body
 const booksTableBody = document.getElementById("booksTableBody");
@@ -339,6 +341,14 @@ backButton.addEventListener("click", () => {
 
 manageRequestsButton.addEventListener("click", () => {
   window.electronAPI.loadPage("views/librarian-requests.html");
+});
+
+manageBorrowedBooksButton.addEventListener("click", () => {
+  window.electronAPI.loadPage("views/librarian-borrowed-books.html");
+});
+
+issueBookButton.addEventListener("click", () => {
+  window.electronAPI.loadPage("views/librarian-issue-book.html");
 });
 
 function showConfirmation(message, errorCode) {

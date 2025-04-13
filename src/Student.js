@@ -175,15 +175,16 @@ class Student {
     const borrowedBooks = this.getBorrowedBooks();
     let totalFines = 0;
     const today = new Date();
-
+    today.setHours(0, 0, 0, 0); // Normalize to midnight
     borrowedBooks.forEach((book) => {
       const dueDate = new Date(book.dueDate);
-      if (today > dueDate) {
-        const daysOverdue = Math.floor((today - dueDate) / (1000 * 60 * 60 * 24));
+      dueDate.setHours(0, 0, 0, 0); // Normalize dueDate
+      const timeDiff = today - dueDate;
+      if (timeDiff > 0) {
+        const daysOverdue = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
         totalFines += daysOverdue * 5; // $5 per day overdue
       }
     });
-
     this.fines = totalFines;
     this.saveFines();
     return totalFines;
@@ -192,19 +193,25 @@ class Student {
   getDueDateStatus() {
     const borrowedBooks = this.getBorrowedBooks();
     const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize to midnight for accurate comparison
     return borrowedBooks.map((book) => {
       const dueDate = new Date(book.dueDate);
-      const daysUntilDue = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+      dueDate.setHours(0, 0, 0, 0); // Normalize dueDate
+      const timeDiff = dueDate - today;
+      const daysUntilDue = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
       let color = "green";
+      let fine = 0;
       if (daysUntilDue < 0) {
         color = "red";
+        fine = Math.abs(daysUntilDue) * 5; // $5 per day overdue
       } else if (daysUntilDue <= 2) {
         color = "yellow";
       }
       return {
         ...book,
-        daysUntilDue: daysUntilDue >= 0 ? `Due in ${Math.abs(daysUntilDue)} day(s)` : `Overdue by ${Math.abs(daysUntilDue)} day(s)`,
+        daysUntilDue: daysUntilDue >= 0 ? `Due in ${daysUntilDue} day(s)` : `Overdue by ${Math.abs(daysUntilDue)} day(s)`,
         notificationColor: color,
+        fine: fine
       };
     });
   }

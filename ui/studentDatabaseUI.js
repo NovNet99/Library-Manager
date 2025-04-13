@@ -141,7 +141,10 @@ async function displayBorrowedBooks() {
         <p><strong>ISBN:</strong> ${book.isbn}</p>
         <p><strong>Approval Date:</strong> ${book.approvalDate}</p>
         <p><strong>Due Date:</strong> ${book.dueDate}</p>
-        <p><strong>Status:</strong> <span style="color: ${book.notificationColor}">${book.daysUntilDue}</span></p>
+      </div>
+      <div class="status-fines">
+        <p class="overdue-status" style="color: ${book.notificationColor}"><strong>Status:</strong> ${book.daysUntilDue}</p>
+        <p class="book-fine ${book.fine > 0 ? 'overdue' : ''}"><strong>Fine:</strong> $${book.fine}</p>
       </div>
     `;
     borrowedBooksList.appendChild(item);
