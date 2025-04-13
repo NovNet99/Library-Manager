@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styling.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <script defer src="../ui/librarianIssueBookUI.js"></script>
+  <title>Issue Book</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet" />
+</head>
+<body id="librarianIssueBookBody">
+  <div class="header-container">
+    <button id="backButton" class="back-button librarian-back-button">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="header-text">
+      <h1>Issue Book to Student</h1>
+      <h2 id="librarianName"></h2>
+    </div>
+  </div>
+
+  <p id="confirmationMessage" class="confirmation-message"></p>
+
+  <div class="issue-book-form">
+    <form id="issueBookForm">
+      <div class="form-group">
+        <label for="studentSelect">Select Student:</label>
+        <select id="studentSelect" name="student" required>
+          <option value="" disabled selected>Select a student</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="bookSelect">Select Book:</label>
+        <select id="bookSelect" name="book" required>
+          <option value="" disabled selected>Select a book</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="dueDate">Due Date:</label>
+        <input type="date" id="dueDate" name="dueDate" required />
+      </div>
+      <button type="submit">Issue Book</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -64,6 +64,7 @@ const createWindow = () => {
 
   //Loads the index.html front end code in the created window.
   mainWindow.loadFile("views/index.html");
+  //mainWindow.loadFile("views/test.html");
 };
 
 //Waits until Electron has finished initializing.
@@ -82,23 +83,28 @@ app.whenReady().then(() => {
 //Loads a different HTML file allowing view switching.
 ipcMain.on("load-page", (_, file) => {
   if (mainWindow) {
-    mainWindow.loadFile(file); // Load the requested HTML file
+    mainWindow.loadFile(file);
   }
 });
 
 /*--------------------FUNCTIONS RELATED TO METHOD EXPOSURE--------------------*/
+//Exposed function for user registration and login.
 ipcMain.handle(
   "register-user",
-  async (event, { username, password, repeatPassword, role, extraData }) => {
+  async (_, { username, password, repeatPassword, role, extraData }) => {
+    //Creates a user manager object for the specified role (librarian or student).
     const userManager = new UserManager(role);
+    //Registers the user with the given details.
     const regsisterData = userManager.registerUser(
       username, password, repeatPassword, extraData
     );
 
+    //If the registration succeeds and the user is a librarian, create a new librarian object.
     if (regsisterData.success && role === "librarian") {
       const databaseController = new DatabaseController(bookDataFilePath);
       librarian = new Librarian(username, extraData.librarianCode, databaseController);
     }
+    //If the registration succeeds and the user is a student, create a new student object.
     if (regsisterData.success && role === "student") {
       const databaseController = new DatabaseController(bookDataFilePath);
       student = new Student(username, databaseController);
@@ -164,8 +170,20 @@ ipcMain.handle("show-message-box", async (_, message) => {
   });
 });
 
+ipcMain.handle("search-books", async (event, searchParams) => {
+
+  if(librarian){
+    return librarian.searchBook(searchParams);
+  }
+  else if(student){
+    return student.searchBook(searchParams);
+  }
+  throw new Error("No user logged in");
+  
+});
+
 /*--------------------FUNCTIONS RELATED TO BOOK BORROWING--------------------*/
-ipcMain.handle("request-book", async (event, isbn) => {
+ipcMain.handle("request-book", async (_, isbn) => {
   if (!student) throw new Error("No student logged in");
   return student.requestBook(isbn);
 });
@@ -175,29 +193,87 @@ ipcMain.handle("get-all-requests", async () => {
   return librarian.getAllRequests();
 });
 
-ipcMain.handle("unrequest-book", async (event, isbn) => {
+ipcMain.handle("unrequest-book", async (_, isbn) => {
   if (!student) throw new Error("No student logged in");
   return student.unrequestBook(isbn);
 });
 
-ipcMain.handle("get-student-requests", async (event, username) => {
+ipcMain.handle("get-student-requests", async (_, username) => {
   if (!student || student.userName !== username) throw new Error("No matching student logged in");
   return student.getStudentRequests();
 });
 
-ipcMain.handle("approve-request", async (event, { username, isbn, dueDate }) => {
+ipcMain.handle("approve-request", async (_, { username, isbn, dueDate }) => {
   if (!librarian) throw new Error("No librarian logged in");
   return librarian.approveRequest(username, isbn, dueDate);
 });
 
-ipcMain.handle("decline-request", async (event, { username, isbn }) => {
+ipcMain.handle("decline-request", async (_, { username, isbn }) => {
   if (!librarian) throw new Error("No librarian logged in");
   return librarian.declineRequest(username, isbn);
 });
 
-ipcMain.handle("get-borrowed-books", async (event, username) => {
+ipcMain.handle("get-borrowed-books", async (_, username) => {
   if (!student || student.userName !== username) throw new Error("No matching student logged in");
   return student.getBorrowedBooks();
+});
+
+
+/*--------------------FUNCTIONS RELATED TO FINE HANDLING--------------------*/
+ipcMain.handle("get-due-date-status", async (_, username) => {
+  if (!student || student.userName !== username) throw new Error("No matching student logged in");
+  return student.getDueDateStatus();
+});
+
+ipcMain.handle("get-fines", async (_, username) => {
+  if (!student || student.userName !== username) throw new Error("No matching student logged in");
+  return student.getFines();
+});
+
+
+
+
+/*--------------------FUNCTIONS RELATED TO LIBRARIAN FINE HANDLING AND BOOK RETURNS--------------------*/
+ipcMain.handle('get-all-borrowed-books-with-fines', async () => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.getAllBorrowedBooksWithFines();
+});
+
+ipcMain.handle('confirm-book-return', async (event, { username, isbn }) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.confirmBookReturn({ username, isbn });
+});
+
+ipcMain.handle('confirm-payment', async (event, { username, isbn }) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.confirmPayment({ username, isbn });
+});
+
+ipcMain.handle('confirm-payment-and-return', async (event, { username, isbn }) => {
+  if (!librarian) throw new Error("No librarian logged in");
+  return librarian.confirmPaymentAndReturn({ username, isbn });
+});
+
+
+
+ipcMain.handle("get-all-students", async () => {
+  try {
+    if (!librarian) throw new Error("Librarian instance not initialized");
+    return await librarian.getAllStudents();
+  } catch (error) {
+    console.error("IPC get-all-students error:", error.message);
+    throw error;
+  }
+});
+
+ipcMain.handle("issue-book", async (event, { username, isbn, dueDate }) => {
+  try {
+    if (!librarian) throw new Error("Librarian instance not initialized");
+    return await librarian.issueBook({ username, isbn, dueDate });
+  } catch (error) {
+    console.error("IPC issue-book error:", error.message);
+    throw error;
+  }
 });
 
 

@@ -1,28 +1,37 @@
-//Page Elements
+// Page Elements
 const backButton = document.getElementById("backButton");
 const librarianUsername = localStorage.getItem("librarianUsername");
 const librarianUsernameDisplay = document.getElementById("librarianName");
 const confirmationMessage = document.getElementById("confirmationMessage");
 
-//Add Book Form Elements
+// Add Book Form Elements
 const addBookForm = document.getElementById("addBookForm");
-
 const bookTitle = document.getElementById("titleInputAddBook");
 const bookAuthor = document.getElementById("authorInputAddBook");
 const bookIsbn = document.getElementById("isbnInputAddBook");
 const bookGenre = document.getElementById("genreSelect");
-
 const errorMessage = document.getElementById("errorMessage");
 
-const manageRequestsButton = document.getElementById("manageRequestsButton");
+// Search Book Form Elements
+const searchBookForm = document.getElementById("searchBookForm");
+const searchTitle = document.getElementById("titleInputSearchBook");
+const searchAuthor = document.getElementById("authorInputSearchBook");
+const searchIsbn = document.getElementById("isbnInputSearchBook");
+const searchGenre = document.getElementById("searchGenreSelect");
+const searchErrorMessage = document.getElementById("searchErrorMessage");
+const clearSearchButton = document.getElementById("clearSearchButton");
 
-//Table Body
+const manageRequestsButton = document.getElementById("manageRequestsButton");
+const manageBorrowedBooksButton = document.getElementById("manageBorrowedBooksButton");
+const issueBookButton = document.getElementById("issueBookButton");
+
+// Table Body
 const booksTableBody = document.getElementById("booksTableBody");
 
-//Set the librarian username in the UI
+// Set the librarian username in the UI
 librarianUsernameDisplay.textContent = `Welcome, ${librarianUsername}`;
 
-//Initialize the table with existing books
+// Initialize the table with existing books
 displayBooks();
 
 window.addEventListener("beforeunload", () => {
@@ -36,6 +45,10 @@ async function displayBooks(books) {
   }
 
   booksTableBody.innerHTML = ""; // Clear existing rows
+  if (!books || books.length === 0) {
+    booksTableBody.innerHTML = "<tr><td colspan='7'>No books found.</td></tr>";
+    return;
+  }
   books.forEach((book, index) => addBookRow(book, index));
 }
 
@@ -59,9 +72,7 @@ function addBookRow(book, index) {
 }
 
 // Function to edit a book in the table
-// This function is called when the "Edit" button is clicked for a book
 async function editBook(index) {
-  // Check if the row exists before trying to access it
   const row = document.getElementById(`row-${parseInt(index) + 1}`);
   if (!row) {
     console.error(`Row with ID row-${parseInt(index) + 1} not found`);
@@ -69,8 +80,6 @@ async function editBook(index) {
     return;
   }
 
-  // Get the book data from the database using the index
-  // This assumes that the index corresponds to the book's position in the database
   const books = await window.electronAPI.getBooks();
   const book = books[index];
   if (!book) {
@@ -79,7 +88,6 @@ async function editBook(index) {
     return;
   }
 
-  //Changes the row to editable fields
   row.innerHTML = `
     <td>${parseInt(index) + 1}</td>
     <td><input type="text" value="${
@@ -130,9 +138,7 @@ async function editBook(index) {
 }
 
 // Function to save the edited book
-// This function is called when the "Save" button is clicked after editing a book
 async function saveBook(index, originalIsbn) {
-  //Get the values from the input fields according to the index
   const title = document.getElementById(`edit-title-${index}`).value.trim();
   const author = document.getElementById(`edit-author-${index}`).value.trim();
   const isbn = document.getElementById(`edit-isbn-${index}`).value.trim();
@@ -140,11 +146,8 @@ async function saveBook(index, originalIsbn) {
     document.getElementById(`edit-available-${index}`).value === "true";
   const genre = document.getElementById(`edit-genre-${index}`).value;
 
-  //Stores the updated book data in an object
   const updatedBook = { title, author, isbn, available, genre };
 
-  //Get the errors from the input fields
-  //This function checks if the input fields are empty and returns an array of errors
   const errors = getAddBookErrors(title, author, isbn, genre);
   if (errors.length > 0) {
     const message = `<ul>${errors
@@ -154,28 +157,12 @@ async function saveBook(index, originalIsbn) {
     return;
   }
 
-  //Adds the updated book to the database using the original ISBN
   const result = await window.electronAPI.editBook(originalIsbn, updatedBook);
 
-  //Check if the result is successful
-  //If successful, update the row in the table with the new data
   if (result.success) {
-    //await displayBooks();
-    const updatedRow = document.getElementById(`row-${parseInt(index) + 1}`);
-    if (updatedRow) {
-      updatedRow.innerHTML = `
-      <td>${parseInt(index) + 1}</td>
-      <td>${title}</td>
-      <td>${author}</td>
-      <td>${isbn}</td>
-      <td>${genre}</td>
-      <td>${available ? "Yes" : "No"}</td>
-      <td>
-        <button type="button" onclick="editBook('${index}')">Edit</button>
-        <button type="button" onclick="removeBook('${isbn}')">Remove</button>
-      </td>
-    `;
-    }
+    // Refresh the table to reflect the updated book
+    const books = await window.electronAPI.getBooks();
+    displayBooks(books);
     showConfirmation("Book updated successfully.", 1);
   } else {
     showConfirmation(result.message, 0);
@@ -186,12 +173,9 @@ async function removeBook(isbn) {
   try {
     const result = await window.electronAPI.removeBook(isbn);
     if (result.success) {
-      //await displayBooks();
-      const row = [...booksTableBody.rows].find(
-        (r) => r.cells[3].textContent === isbn
-      );
-      if (row) row.remove();
-      updateRowIndices();
+      // Refresh the table
+      const books = await window.electronAPI.getBooks();
+      displayBooks(books);
       showConfirmation("Book removed successfully.", 1);
     } else {
       showConfirmation(result.message, 0);
@@ -208,8 +192,10 @@ function updateRowIndices() {
   });
 }
 
+// Add Book Form Submission
 addBookForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
+  console.log("Add book form submitted");
+  event.preventDefault(); // Prevent page reload
   const bookTitleValue = bookTitle.value.trim();
   const bookAuthorValue = bookAuthor.value.trim();
   const bookIsbnValue = bookIsbn.value.trim();
@@ -242,23 +228,74 @@ addBookForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  const result = await window.electronAPI.addBook(book);
+  try {
+    const result = await window.electronAPI.addBook(book);
 
-  if (result.success) {
-    //await displayBooks();
-    addBookRow(book, booksTableBody.children.length + 1);
-    showConfirmation("Book added successfully.", 1);
-    bookTitle.value = "";
-    bookAuthor.value = "";
-    bookIsbn.value = "";
-    document.getElementById("availableYes").checked = true;
-    bookGenre.value = "Fiction";
-  } else {
-    errors.push(result.message);
-    errorMessage.innerHTML = `<ul>${errors
-      .map((error) => `<li>${error}</li>`)
-      .join("")}</ul>`;
+    if (result.success) {
+      // Refresh the table with the updated book list
+      const books = await window.electronAPI.getBooks();
+      displayBooks(books);
+      showConfirmation("Book added successfully.", 1);
+      // Reset form
+      bookTitle.value = "";
+      bookAuthor.value = "";
+      bookIsbn.value = "";
+      document.getElementById("availableYes").checked = true;
+      bookGenre.value = "Fiction";
+      errorMessage.innerHTML = "";
+    } else {
+      errors.push(result.message);
+      errorMessage.innerHTML = `<ul>${errors
+        .map((error) => `<li>${error}</li>`)
+        .join("")}</ul>`;
+    }
+  } catch (error) {
+    errorMessage.innerHTML = `<ul><li>Error adding book: ${error.message}</li></ul>`;
+    showConfirmation("Error adding book.", 0);
   }
+});
+
+// Search Book Form Submission
+searchBookForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const title = searchTitle.value.trim();
+  const author = searchAuthor.value.trim();
+  const isbn = searchIsbn.value.trim();
+  const genre = searchGenre.value;
+  const availabilityValue = document.querySelector(
+    'input[name="searchAvailability"]:checked'
+  ).value;
+  const available =
+    availabilityValue === "all" ? null : availabilityValue === "true";
+
+  const searchParams = { title, author, isbn, genre, available };
+
+  try {
+    const books = await window.electronAPI.searchBooks(searchParams);
+    displayBooks(books);
+    searchErrorMessage.innerHTML = "";
+    showConfirmation(
+      books.length > 0
+        ? `Found ${books.length} book(s).`
+        : "No books found.",
+      books.length > 0 ? 1 : 0
+    );
+  } catch (error) {
+    searchErrorMessage.innerHTML = `<ul><li>Error searching books: ${error.message}</li></ul>`;
+    showConfirmation("Error searching books.", 0);
+  }
+});
+
+// Clear Search Button
+clearSearchButton.addEventListener("click", () => {
+  searchTitle.value = "";
+  searchAuthor.value = "";
+  searchIsbn.value = "";
+  searchGenre.value = "None";
+  document.getElementById("searchAvailableAll").checked = true;
+  searchErrorMessage.innerHTML = "";
+  displayBooks(); // Reset to full book list
+  showConfirmation("Search cleared.", 1);
 });
 
 function getAddBookErrors(title, author, isbn, genre) {
@@ -287,10 +324,18 @@ allAddBookInputs.forEach((input) => {
   });
 });
 
+const allSearchBookInputs = [searchTitle, searchAuthor, searchIsbn].filter(
+  (input) => input
+);
+allSearchBookInputs.forEach((input) => {
+  input.addEventListener("input", () => {
+    searchErrorMessage.innerHTML = "";
+  });
+});
+
 backButton.addEventListener("click", () => {
   localStorage.removeItem("librarianUsername");
   localStorage.removeItem("librarianCode");
-  console.log(localStorage.getItem("librarianUsername"));
   window.electronAPI.loadPage("views/librarian-register.html");
 });
 
@@ -298,8 +343,16 @@ manageRequestsButton.addEventListener("click", () => {
   window.electronAPI.loadPage("views/librarian-requests.html");
 });
 
+manageBorrowedBooksButton.addEventListener("click", () => {
+  window.electronAPI.loadPage("views/librarian-borrowed-books.html");
+});
+
+issueBookButton.addEventListener("click", () => {
+  window.electronAPI.loadPage("views/librarian-issue-book.html");
+});
+
 function showConfirmation(message, errorCode) {
-  if (errorCode == 0) {
+  if (errorCode === 0) {
     confirmationMessage.style.color = "red";
   } else {
     confirmationMessage.style.color = "green";

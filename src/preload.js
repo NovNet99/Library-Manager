@@ -25,18 +25,40 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getBooks: () => ipcRenderer.invoke("get-books"),
 
   /*--------------------FUNCTIONS RELATED TO LIBRARY DATABASE MANAGEMENT--------------------*/
-  getLibrarianData: (username) => ipcRenderer.invoke("get-librarian-data", username),
+  getLibrarianData: (username) =>
+    ipcRenderer.invoke("get-librarian-data", username),
   addBook: (book) => ipcRenderer.invoke("add-book", book),
   removeBook: (isbn) => ipcRenderer.invoke("remove-book", isbn),
-  editBook: (isbn, updatedBook) => ipcRenderer.invoke("edit-book", isbn, updatedBook),
+  editBook: (isbn, updatedBook) =>
+    ipcRenderer.invoke("edit-book", isbn, updatedBook),
+  searchBooks: (searchParams) =>
+    ipcRenderer.invoke("search-books", searchParams),
 
   /*--------------------FUNCTIONS RELATED TO BOOK BORROWING MANAGEMENT--------------------*/
   requestBook: (isbn) => ipcRenderer.invoke("request-book", isbn),
   getAllRequests: () => ipcRenderer.invoke("get-all-requests"),
   unrequestBook: (isbn) => ipcRenderer.invoke("unrequest-book", isbn),
-  getStudentRequests: (username) => ipcRenderer.invoke("get-student-requests", username),
+  getStudentRequests: (username) =>
+    ipcRenderer.invoke("get-student-requests", username),
   approveRequest: (data) => ipcRenderer.invoke("approve-request", data),
   declineRequest: (data) => ipcRenderer.invoke("decline-request", data),
-  getBorrowedBooks: (username) => ipcRenderer.invoke("get-borrowed-books", username),
+  getBorrowedBooks: (username) =>
+    ipcRenderer.invoke("get-borrowed-books", username),
 
+  /*--------------------FUNCTIONS RELATED TO FINE MANAGEMENT--------------------*/
+  getDueDateStatus: (username) =>
+    ipcRenderer.invoke("get-due-date-status", username),
+  getFines: (username) => ipcRenderer.invoke("get-fines", username),
+
+  /*--------------------FUNCTIONS RELATED TO LIBRARIAN FINE MANAGEMENT AND BOOK RETURNS--------------------*/
+  getAllBorrowedBooksWithFines: () =>
+    ipcRenderer.invoke("get-all-borrowed-books-with-fines"),
+  confirmBookReturn: (data) => ipcRenderer.invoke("confirm-book-return", data),
+  confirmPayment: (data) => ipcRenderer.invoke("confirm-payment", data),
+  confirmPaymentAndReturn: (data) =>
+    ipcRenderer.invoke("confirm-payment-and-return", data),
+
+  /*--------------------FUNCTIONS RELATED TO ISSUING BOOKS--------------------*/
+  getAllStudents: () => ipcRenderer.invoke("get-all-students"),
+  issueBook: (data) => ipcRenderer.invoke("issue-book", data),
 });

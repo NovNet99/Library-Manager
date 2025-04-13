@@ -1,74 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styling.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <script defer src="../ui/librarianDatabaseUI.js"></script>
-    <title>Librarian Database</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body id="librarianDatabaseBody">
-    <div class="header-container">
-      <button id="backButton" class="back-button librarian-back-button">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-      <div class="header-text">
-        <h1>Library Database</h1>
-        <h2 id="librarianName"></h2>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styling.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <script defer src="../ui/librarianDatabaseUI.js"></script>
+  <title>Librarian Database</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet" />
+</head>
+<body id="librarianDatabaseBody">
+  <div class="header-container">
+    <button id="backButton" class="back-button librarian-back-button">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="header-text">
+      <h1>Library Database</h1>
+      <h2 id="librarianName"></h2>
     </div>
+  </div>
 
-    <p id="confirmationMessage" class="confirmation-message"></p>
+  <p id="confirmationMessage" class="confirmation-message"></p>
 
+  <div class="management-buttons">
     <button id="manageRequestsButton">Manage Requests</button>
-    <div class="scrollable-table-wrapper">
-      <table id="booksTable" class="table-content">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>ISBN</th>
-            <th>Genre</th>
-            <th>Available</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="booksTableBody"></tbody>
-        <!-- Data will be inserted here dynamically -->
-      </table>
-    </div>
+    <button id="manageBorrowedBooksButton">Manage Borrowed Books</button>
+    <button id="issueBookButton">Issue Book</button>
+  </div>
 
+  <div class="scrollable-table-wrapper">
+    <table id="booksTable" class="table-content">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Genre</th>
+          <th>Available</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="booksTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="forms-container">
     <div class="add-book-wrapper">
       <form id="addBookForm">
         <label class="add-book-label" aria-hidden="true">Create New Book</label>
         <p id="errorMessage" class="error-message"></p>
-        <input
-          type="text"
-          name="txt"
-          placeholder="Title"
-          id="titleInputAddBook"
-        />
-        <input
-          type="text"
-          name="txt"
-          placeholder="Author"
-          id="authorInputAddBook"
-        />
-        <input
-          type="text"
-          name="txt"
-          placeholder="ISBN"
-          id="isbnInputAddBook"
-        />
+        <input type="text" name="txt" placeholder="Title" id="titleInputAddBook" />
+        <input type="text" name="txt" placeholder="Author" id="authorInputAddBook" />
+        <input type="text" name="txt" placeholder="ISBN" id="isbnInputAddBook" />
         <div class="genre-wrapper">
           <label for="genreSelect">Genre:</label>
           <select id="genreSelect" name="genre">
@@ -83,24 +67,47 @@
         </div>
         <div class="availability-wrapper">
           <label>Available:</label>
-          <input
-            type="radio"
-            name="availability"
-            value="true"
-            id="availableYes"
-            checked
-          />
+          <input type="radio" name="availability" value="true" id="availableYes" checked />
           <label for="availableYes">Yes</label>
-          <input
-            type="radio"
-            name="availability"
-            value="false"
-            id="availableNo"
-          />
+          <input type="radio" name="availability" value="false" id="availableNo" />
           <label for="availableNo">No</label>
         </div>
         <button type="submit">Add Book</button>
       </form>
     </div>
-  </body>
+
+    <div class="search-book-wrapper">
+      <form id="searchBookForm">
+        <label class="search-book-label" aria-hidden="true">Search Books</label>
+        <p id="searchErrorMessage" class="error-message"></p>
+        <input type="text" name="txt" placeholder="Title" id="titleInputSearchBook" />
+        <input type="text" name="txt" placeholder="Author" id="authorInputSearchBook" />
+        <input type="text" name="txt" placeholder="ISBN" id="isbnInputSearchBook" />
+        <div class="genre-wrapper">
+          <label for="searchGenreSelect">Genre:</label>
+          <select id="searchGenreSelect" name="genre">
+            <option value="None" selected>None</option>
+            <option value="Fiction">Fiction</option>
+            <option value="Non-Fiction">Non-Fiction</option>
+            <option value="Science Fiction">Science Fiction</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Biography">Biography</option>
+          </select>
+        </div>
+        <div class="availability-wrapper">
+          <label>Available:</label>
+          <input type="radio" name="searchAvailability" value="all" id="searchAvailableAll" checked />
+          <label for="searchAvailableAll">All</label>
+          <input type="radio" name="searchAvailability" value="true" id="searchAvailableYes" />
+          <label for="searchAvailableYes">Yes</label>
+          <input type="radio" name="searchAvailability" value="false" id="searchAvailableNo" />
+          <label for="searchAvailableNo">No</label>
+        </div>
+        <button type="submit">Search</button>
+        <button type="button" id="clearSearchButton">Clear</button>
+      </form>
+    </div>
+  </div>
+</body>
 </html>
