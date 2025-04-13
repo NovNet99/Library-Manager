@@ -218,15 +218,11 @@ h2#librarianName {
 /*--------------------Add Book Menu Styling--------------------*/
 .add-book-wrapper {
   width: 280px;
-  min-height:320px;
-  background: red;
-  overflow: hidden;
+  min-height: 320px;
   background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")
     no-repeat center/ cover;
   border-radius: 10px;
   box-shadow: 5px 20px 50px #000;
-  margin-bottom: 50px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -359,6 +355,111 @@ h2#librarianName {
   margin: 5px; /* Override default button margin */
 }
 
+/*--------------------Librarian Database Search Menu Styling--------------------*/
+.forms-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 80%;
+  margin: 0 auto 50px auto;
+}
+
+.search-book-wrapper {
+  width: 280px;
+  min-height: 320px;
+  background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")
+    no-repeat center/ cover;
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-book-wrapper label {
+  color: #fff;
+  font-size: 1.5em;
+  justify-content: center;
+  display: flex;
+  margin: 20px;
+}
+
+.search-book-wrapper input {
+  width: 90%;
+  height: 10px;
+  background: #e0dede;
+  justify-content: center;
+  display: flex;
+  margin: 20px auto;
+  padding: 12px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+.search-book-wrapper .availability-wrapper {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.search-book-wrapper .availability-wrapper label {
+  margin: 0;
+  font-size: 1em;
+}
+
+.search-book-wrapper .availability-wrapper input[type="radio"] {
+  width: auto;
+  height: auto;
+  margin: 0 5px;
+  background: none;
+}
+
+.search-book-wrapper .genre-wrapper {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.search-book-wrapper .genre-wrapper label {
+  margin: 0;
+  font-size: 1em;
+}
+
+.search-book-wrapper .genre-wrapper select {
+  width: 60%;
+  padding: 8px;
+  background: #e0dede;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #000;
+}
+
+.search-book-wrapper button[type="submit"] {
+  background: #573b8a;
+}
+
+.search-book-wrapper button[type="submit"]:hover {
+  background: #6d44b8;
+}
+
+.search-book-wrapper button[type="button"] {
+  background: #cc0000; /* Red for Clear button */
+  width: 90%;
+}
+
+.search-book-wrapper button[type="button"]:hover {
+  background: #ff3333; /* Lighter red on hover */
+}
+
 /*--------------------Librarian Database Table Styling In Edit Mode--------------------*/
 .table-content td input {
   width: 70%;
@@ -401,31 +502,48 @@ body#studentDatabaseBody {
 }
 
 .header-container {
-  position: sticky;
+  position: sticky; /* Changed to fixed to stay at top */
   top: 0;
   left: 0;
-  width: calc(100%); /* Adjust for spacing */
+  right: 0;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centers the h1 */
+  justify-content: space-between; /* Spread content */
   box-sizing: border-box;
-  border-bottom: 3px solid white;
-  z-index: 10;
+  padding: 10px 20px;
+  z-index: 1000; /* Above other content */
   background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-
+  border-bottom: 3px solid white;
 }
 
 .header-text {
   display: flex;
-  flex-direction: column; /* Stacks h1 and h2 vertically */
-  align-items: center; /* Centers them horizontally */
-  text-align: center; /* Ensures text itself is centered */
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1; /* Take available space */
+}
+
+.welcome-fines-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* Space between welcome and fines */
+  margin: 5px 0;
 }
 
 h2#studentName {
-  color: #fff; /* Match h1 color */
-  font-size: 1.2em; /* Smaller than h1, adjust as needed */
-  margin: 5px 0 10px 0; /* Small top margin for spacing, no other margins */
+  color: #fff;
+  font-size: 1.2em;
+  margin: 0; /* Override h2 default */
+  text-align: left; /* Align with fines */
+}
+
+.fines-display {
+  font-size: 1.2em;
+  color: green; /* Default, overridden by JS */
+  margin: 0;
+  text-align: left; /* Align with welcome */
+  white-space: nowrap; /* Prevent wrapping */
 }
 
 .back-button.student-back-button {
@@ -436,12 +554,73 @@ h2#studentName {
 }
 
 .confirmation-message {
-  text-align: center;
-  color: #00cc00; /* Green for success */
   font-size: 1.2em;
-  margin: 10px 0;
-  padding: 10px;
+  color: #00cc00; /* Default green, overridden by JS */
+  margin: 5px 0 0 0;
+  text-align: center;
+  width: 100%; /* Ensure it spans below */
 }
+
+/*--------------------Student Database Table Styling--------------------*/
+.scrollable-table-wrapper {
+  max-height: 350px;
+  overflow-y: auto;
+  width: 80%;
+  margin: 20px;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")
+    no-repeat center/ cover;
+    border-radius: 10px 0 0 10px;
+  box-shadow: 5px 20px 100px #000;
+}
+
+.table-content {
+  min-width: 80%;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-content thead tr {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-content th {
+  font-size: 1.4em;
+  padding: 15px;
+  background: #573b8a;
+  color: #fff;
+  text-align: left;
+  position: sticky;
+  top: -1px;
+  z-index: 1;
+}
+
+
+.table-content th,
+.table-content td {
+  padding: 8px 12px;
+  text-align: left;
+  color: #fff;
+}
+
+.table-content tbody tr{
+  border-bottom: 1px solid white;
+}
+
+.table-content tbody tr:last-of-type{
+  border-bottom: 3px solid white;
+}
+
+.table-content td button {
+  width: 85px;
+  height: 30px;
+  white-space: nowrap;
+  margin: 5px; /* Override default button margin */
+}
+
 
 /*--------------------Student Database Request Book Styling--------------------*/
 .requested-books-list {
@@ -566,6 +745,9 @@ h2#studentName {
   margin: 0 0 10px 0;
   text-align: left;
 }
+
+
+
 
 /*--------------------Librarian Requests Styling--------------------*/
 body#librarianRequestsBody {

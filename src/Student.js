@@ -9,7 +9,13 @@ class Student {
     this.database = database;
     this.requestsFilePath = path.join(__dirname, "../requests.json");
     this.borrowedBooksFilePath = path.join(__dirname, "../borrowedBooks.json");
+    this.finesFilePath = path.join(__dirname, "../fines.json");
     this.requests = this.loadRequests(); // Ensure this runs last to sync with file
+    this.fines = this.loadFines();
+  }
+
+  searchBook(searchParams) {
+    return this.database.searchBook(searchParams);
   }
 
   loadRequests() {
@@ -35,6 +41,12 @@ class Student {
 
   requestBook(isbn) {
     try {
+      // Check for outstanding fines
+      const fines = this.calculateFines();
+      if (fines > 0) {
+        return { success: false, message: "Cannot request book: Outstanding fines must be cleared." };
+      }
+  
       const book = this.database.getBookByIsbn(isbn);
       if (!book) return { success: false, message: "Book not found." };
       if (!book.available) return { success: false, message: "Book is not available." };
@@ -42,14 +54,14 @@ class Student {
       
       const request = { isbn, title: book.title, requestedAt: new Date().toISOString() };
       this.requests.push(request);
-
+  
       // Persist to requests.json
       const requests = fs.existsSync(this.requestsFilePath)
         ? JSON.parse(fs.readFileSync(this.requestsFilePath, "utf-8"))
         : {};
       requests[this.userName] = this.requests;
       fs.writeFileSync(this.requestsFilePath, JSON.stringify(requests, null, 2));
-
+  
       return { success: true, message: `Requested ${book.title} successfully.` };
     } catch (error) {
       console.error(`Error requesting book ${isbn} for ${this.userName}:`, error.message);
@@ -124,6 +136,81 @@ class Student {
 
   getRequests() {
     return this.requests;
+  }
+
+  loadFines() {
+    try {
+      if (fs.existsSync(this.finesFilePath)) {
+        const fileContent = fs.readFileSync(this.finesFilePath, "utf-8");
+        if (!fileContent.trim()) {
+          fs.writeFileSync(this.finesFilePath, JSON.stringify({}, null, 2));
+          return 0;
+        }
+        const fines = JSON.parse(fileContent);
+        return fines[this.userName] || 0;
+      } else {
+        fs.writeFileSync(this.finesFilePath, JSON.stringify({}, null, 2));
+        return 0;
+      }
+    } catch (error) {
+      console.error(`Error loading fines for ${this.userName}:`, error.message);
+      fs.writeFileSync(this.finesFilePath, JSON.stringify({}, null, 2));
+      return 0;
+    }
+  }
+
+  saveFines() {
+    try {
+      const fines = fs.existsSync(this.finesFilePath)
+        ? JSON.parse(fs.readFileSync(this.finesFilePath, "utf-8"))
+        : {};
+      fines[this.userName] = this.fines;
+      fs.writeFileSync(this.finesFilePath, JSON.stringify(fines, null, 2));
+    } catch (error) {
+      console.error(`Error saving fines for ${this.userName}:`, error.message);
+    }
+  }
+
+  calculateFines() {
+    const borrowedBooks = this.getBorrowedBooks();
+    let totalFines = 0;
+    const today = new Date();
+
+    borrowedBooks.forEach((book) => {
+      const dueDate = new Date(book.dueDate);
+      if (today > dueDate) {
+        const daysOverdue = Math.floor((today - dueDate) / (1000 * 60 * 60 * 24));
+        totalFines += daysOverdue * 5; // $5 per day overdue
+      }
+    });
+
+    this.fines = totalFines;
+    this.saveFines();
+    return totalFines;
+  }
+
+  getDueDateStatus() {
+    const borrowedBooks = this.getBorrowedBooks();
+    const today = new Date();
+    return borrowedBooks.map((book) => {
+      const dueDate = new Date(book.dueDate);
+      const daysUntilDue = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+      let color = "green";
+      if (daysUntilDue < 0) {
+        color = "red";
+      } else if (daysUntilDue <= 2) {
+        color = "yellow";
+      }
+      return {
+        ...book,
+        daysUntilDue: daysUntilDue >= 0 ? `Due in ${Math.abs(daysUntilDue)} day(s)` : `Overdue by ${Math.abs(daysUntilDue)} day(s)`,
+        notificationColor: color,
+      };
+    });
+  }
+
+  getFines() {
+    return this.calculateFines();
   }
 }
 

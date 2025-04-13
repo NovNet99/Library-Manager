@@ -5,16 +5,23 @@ const confirmationMessage = document.getElementById("confirmationMessage");
 const booksTableBody = document.getElementById("booksTableBody");
 const requestedBooksList = document.getElementById("requestedBooksList");
 const borrowedBooksList = document.getElementById("borrowedBooksList");
+const finesDisplay = document.getElementById("finesDisplay"); // New element
 
 studentUsernameDisplay.textContent = `Welcome, ${studentUsername}`;
+
+// Search Book Form Elements
+const searchBookForm = document.getElementById("searchBookForm");
+const searchTitle = document.getElementById("titleInputSearchBook");
+const searchAuthor = document.getElementById("authorInputSearchBook");
+const searchIsbn = document.getElementById("isbnInputSearchBook");
+const searchGenre = document.getElementById("searchGenreSelect");
+const searchErrorMessage = document.getElementById("searchErrorMessage");
+const clearSearchButton = document.getElementById("clearSearchButton");
 
 displayBooks();
 displayRequestedBooks();
 displayBorrowedBooks();
-
-window.addEventListener("beforeunload", () => {
-  console.log("Page is reloading!");
-});
+displayFines(); // New function
 
 async function displayBooks(books) {
   if (!books) books = await window.electronAPI.getBooks();
@@ -119,7 +126,7 @@ async function displayRequestedBooks() {
 }
 
 async function displayBorrowedBooks() {
-  const borrowedBooks = await window.electronAPI.getBorrowedBooks(studentUsername);
+  const borrowedBooks = await window.electronAPI.getDueDateStatus(studentUsername);
   borrowedBooksList.innerHTML = "";
   if (!borrowedBooks || borrowedBooks.length === 0) {
     borrowedBooksList.innerHTML = "<p>No books borrowed yet.</p>";
@@ -134,13 +141,84 @@ async function displayBorrowedBooks() {
         <p><strong>ISBN:</strong> ${book.isbn}</p>
         <p><strong>Approval Date:</strong> ${book.approvalDate}</p>
         <p><strong>Due Date:</strong> ${book.dueDate}</p>
+        <p><strong>Status:</strong> <span style="color: ${book.notificationColor}">${book.daysUntilDue}</span></p>
       </div>
     `;
     borrowedBooksList.appendChild(item);
   });
 }
 
+async function displayFines() {
+  const fines = await window.electronAPI.getFines(studentUsername);
+  finesDisplay.textContent = `Pending Fines: $${fines}`;
+  finesDisplay.style.color = fines > 0 ? "red" : "green";
+}
+
+searchBookForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const title = searchTitle.value.trim();
+  const author = searchAuthor.value.trim();
+  const isbn = searchIsbn.value.trim();
+  const genre = searchGenre.value;
+  const availabilityValue = document.querySelector(
+    'input[name="searchAvailability"]:checked'
+  ).value;
+  const available =
+    availabilityValue === "all" ? null : availabilityValue === "true";
+
+  const searchParams = { title, author, isbn, genre, available };
+
+  try {
+    const books = await window.electronAPI.searchBooks(searchParams);
+    displayBooks(books);
+    searchErrorMessage.innerHTML = "";
+    showConfirmation(
+      books.length > 0
+        ? `Found ${books.length} book(s).`
+        : "No books found.",
+      books.length > 0 ? 1 : 0
+    );
+  } catch (error) {
+    searchErrorMessage.innerHTML = `<ul><li>Error searching books: ${error.message}</li></ul>`;
+    showConfirmation("Error searching books.", 0);
+  }
+});
+
+// Clear Search Button
+clearSearchButton.addEventListener("click", () => {
+  searchTitle.value = "";
+  searchAuthor.value = "";
+  searchIsbn.value = "";
+  searchGenre.value = "None";
+  document.getElementById("searchAvailableAll").checked = true;
+  searchErrorMessage.innerHTML = "";
+  displayBooks();
+  showConfirmation("Search cleared.", 1);
+});
+
+const allSearchBookInputs = [searchTitle, searchAuthor, searchIsbn].filter(
+  (input) => input
+);
+allSearchBookInputs.forEach((input) => {
+  input.addEventListener("input", () => {
+    searchErrorMessage.innerHTML = "";
+  });
+});
+
 backButton.addEventListener("click", () => {
   localStorage.removeItem("studentUsername");
   window.electronAPI.loadPage("views/student-register.html");
 });
+
+function showConfirmation(message, errorCode) {
+  if (errorCode === 0) {
+    confirmationMessage.style.color = "red";
+  } else {
+    confirmationMessage.style.color = "green";
+  }
+
+  confirmationMessage.textContent = message;
+  setTimeout(() => {
+    confirmationMessage.textContent = "";
+  }, 3000);
+}

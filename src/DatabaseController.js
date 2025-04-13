@@ -72,8 +72,31 @@ class DatabaseController {
     return { success: true, message: "Book updated successfully." };
   }
 
-  searchBook(title) {
-    return this.books.filter(book => book.title.toLowerCase().includes(title.toLowerCase()));
+  searchBook({ title = "", author = "", isbn = "", genre = "", available = null }) {
+    return this.books.filter((book) => {
+      const matchesTitle = title
+        ? book.title.toLowerCase().includes(title.toLowerCase())
+        : true;
+      const matchesAuthor = author
+        ? book.author.toLowerCase().includes(author.toLowerCase())
+        : true;
+      const matchesIsbn = isbn
+        ? book.isbn.toLowerCase().includes(isbn.toLowerCase())
+        : true;
+      const matchesGenre = genre && genre !== "None"
+        ? book.genre.toLowerCase() === genre.toLowerCase()
+        : true;
+      const matchesAvailable = available !== null
+        ? book.available === available
+        : true;
+      return (
+        matchesTitle &&
+        matchesAuthor &&
+        matchesIsbn &&
+        matchesGenre &&
+        matchesAvailable
+      );
+    });
   }
 
   getBooks() {

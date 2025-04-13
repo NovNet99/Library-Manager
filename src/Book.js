@@ -7,7 +7,7 @@ class Book {
     this.genre = genre; 
   }
 
-  borrowBook() {
+  /*borrowBook() {
     if (this.available) {
       this.available = false;
       return { success: true, message: "Book borrowed successfully." };
@@ -18,7 +18,7 @@ class Book {
   returnBook() {
     this.available = true;
     return { success: true, message: "Book returned successfully." };
-  }
+  }*/
 }
 
 module.exports = Book;

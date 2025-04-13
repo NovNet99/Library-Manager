@@ -20,8 +20,8 @@ class Librarian {
     return this.database.removeBook(isbn);
   }
 
-  searchBook(title) {
-    return this.database.searchBook(title);
+  searchBook(searchParams) {
+    return this.database.searchBook(searchParams);
   }
 
   getBooks() {
