@@ -7,9 +7,9 @@ class Student {
     this.role = "student";
     this.borrowedBooks = [];
     this.database = database;
-    this.requestsFilePath = path.join(__dirname, "../requests.json");
-    this.borrowedBooksFilePath = path.join(__dirname, "../borrowedBooks.json");
-    this.finesFilePath = path.join(__dirname, "../fines.json");
+    this.requestsFilePath = path.join(__dirname, "../data/requests.json");
+    this.borrowedBooksFilePath = path.join(__dirname, "../data/borrowedBooks.json");
+    this.finesFilePath = path.join(__dirname, "../data/fines.json");
     this.requests = this.loadRequests(); // Ensure this runs last to sync with file
     this.fines = this.loadFines();
   }
@@ -173,47 +173,18 @@ class Student {
 
   calculateFines() {
     const borrowedBooks = this.getBorrowedBooks();
-    let totalFines = 0;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize to midnight
-    borrowedBooks.forEach((book) => {
-      const dueDate = new Date(book.dueDate);
-      dueDate.setHours(0, 0, 0, 0); // Normalize dueDate
-      const timeDiff = today - dueDate;
-      if (timeDiff > 0) {
-        const daysOverdue = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        totalFines += daysOverdue * 5; // $5 per day overdue
-      }
-    });
-    this.fines = totalFines;
+    this.fines = this.database.calculateTotalFines(borrowedBooks);
     this.saveFines();
-    return totalFines;
+    return this.fines;
   }
 
   getDueDateStatus() {
     const borrowedBooks = this.getBorrowedBooks();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize to midnight for accurate comparison
-    return borrowedBooks.map((book) => {
-      const dueDate = new Date(book.dueDate);
-      dueDate.setHours(0, 0, 0, 0); // Normalize dueDate
-      const timeDiff = dueDate - today;
-      const daysUntilDue = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-      let color = "green";
-      let fine = 0;
-      if (daysUntilDue < 0) {
-        color = "red";
-        fine = Math.abs(daysUntilDue) * 5; // $5 per day overdue
-      } else if (daysUntilDue <= 2) {
-        color = "yellow";
-      }
-      return {
-        ...book,
-        daysUntilDue: daysUntilDue >= 0 ? `Due in ${daysUntilDue} day(s)` : `Overdue by ${Math.abs(daysUntilDue)} day(s)`,
-        notificationColor: color,
-        fine: fine
-      };
-    });
+    return this.database.calculateBooksWithFines(borrowedBooks).map((book) => ({
+      ...book,
+      daysUntilDue: book.daysUntilDue >= 0 ? `Due in ${book.daysUntilDue} day(s)` : `Overdue by ${Math.abs(book.daysUntilDue)} day(s)`,
+      notificationColor: book.fine > 0 ? "red" : book.daysUntilDue <= 2 ? "yellow" : "green",
+    }));
   }
 
   getFines() {

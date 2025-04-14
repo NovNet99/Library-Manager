@@ -19,11 +19,22 @@ displayRequests();
 async function displayRequests() {
   const requests = await window.electronAPI.getAllRequests();
   requestsList.innerHTML = "";
-  if (Object.keys(requests).length === 0) {
+  if (!requests || requests.length === 0) {
     requestsList.innerHTML = "<p>No requests pending.</p>";
     return;
   }
-  Object.entries(requests).forEach(([username, userRequests]) => {
+
+  // Group requests by username
+  const groupedRequests = {};
+  requests.forEach((request) => {
+    if (!groupedRequests[request.username]) {
+      groupedRequests[request.username] = [];
+    }
+    groupedRequests[request.username].push(request);
+  });
+
+  // Display grouped requests
+  Object.entries(groupedRequests).forEach(([username, userRequests]) => {
     if (userRequests.length > 0) {
       const section = document.createElement("div");
       section.className = "request-section";

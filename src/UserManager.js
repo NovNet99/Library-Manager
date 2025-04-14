@@ -5,8 +5,7 @@ const path = require("path");
 class UserManager {
   constructor(role) {
     this.role = role;
-
-    this.filePath = path.join(__dirname, `../${role}s.json`); // students.json, librarians.json, admins.json;
+    this.filePath = path.join(__dirname, `../data/${role}s.json`); // students.json, librarians.json
     //Grabs the user register data list.
     this.users = this.loadUsers();
   }
@@ -59,8 +58,8 @@ class UserManager {
         role: "librarian",
         librarianCode: extraData.librarianCode,
       };
-    } else if (this.role === "admin") {
-      user = { username, password, role: "admin" };
+    } else {
+      return { success: false, message: "Invalid user role." };
     }
 
     //If checks are valid, it pushes the new user registration data to the users list and then saves that list.

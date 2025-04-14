@@ -13,11 +13,19 @@ displayBorrowedBooks();
 async function displayBorrowedBooks() {
   const borrowedBooks = await window.electronAPI.getAllBorrowedBooksWithFines();
   borrowedBooksList.innerHTML = "";
-  if (Object.keys(borrowedBooks).length === 0) {
+  if (borrowedBooks.length === 0) {
     borrowedBooksList.innerHTML = "<p>No borrowed books.</p>";
     return;
   }
-  Object.entries(borrowedBooks).forEach(([username, books]) => {
+  // Group books by username
+  const booksByUser = borrowedBooks.reduce((acc, book) => {
+    const { username } = book;
+    acc[username] = acc[username] || [];
+    acc[username].push(book);
+    return acc;
+  }, {});
+  // Render each user's books
+  Object.entries(booksByUser).forEach(([username, books]) => {
     if (books.length > 0) {
       const section = document.createElement("div");
       section.className = "borrowed-section";
@@ -31,6 +39,13 @@ async function displayBorrowedBooks() {
         const item = document.createElement("div");
         item.className = "borrowed-item";
         const statusColor = book.fine > 0 ? "red" : book.daysUntilDue === 0 ? "yellow" : "green";
+        // Conditional buttons with CSS classes
+        const actionButtons = book.fine === 0
+          ? `<button type="button" class="button-return" onclick="confirmReturn('${book.username}', '${book.isbn}', ${book.fine})">Confirm Return</button>`
+          : `
+              <button type="button" class="button-payment" onclick="confirmPayment('${book.username}', '${book.isbn}')">Confirm Payment</button>
+              <button type="button" class="button-payment-return" onclick="confirmPaymentAndReturn('${book.username}', '${book.isbn}')">Confirm Payment & Return</button>
+            `;
         item.innerHTML = `
           <div class="borrowed-details">
             <p><strong>Title:</strong> ${book.title}</p>
@@ -41,9 +56,7 @@ async function displayBorrowedBooks() {
             <p><strong>Fine:</strong> $${book.fine}</p>
           </div>
           <div class="borrowed-actions">
-            <button type="button" onclick="confirmReturn('${username}', '${book.isbn}', ${book.fine})">Confirm Return</button>
-            <button type="button" onclick="confirmPayment('${username}', '${book.isbn}')">Confirm Payment</button>
-            <button type="button" onclick="confirmPaymentAndReturn('${username}', '${book.isbn}')">Confirm Payment & Return</button>
+            ${actionButtons}
           </div>
         `;
         list.appendChild(item);

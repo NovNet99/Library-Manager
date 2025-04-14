@@ -1,13 +1,20 @@
-/*Body*/
+/*-----------------GLOBAL STYLES-----------------*/
 body {
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   min-height: 100vh;
   font-family: "Jost", sans-serif;
   background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+body.standard-body-layout {
+  justify-content: flex-start; /* Align content to top */
+  align-items: center; /* Keep horizontal centering */
+  padding-top: 0px; /* Space for fixed header, adjust as needed */
 }
 
 h1{
@@ -24,7 +31,136 @@ h2{
   margin: 0;
 }
 
-/*--------------------Signup and Login Styling--------------------*/
+p{
+  color: #fff;
+  font-size: 1em;
+  text-align: center;
+  margin: 0;
+}
+
+button {
+  width: 60%;
+  height: 40px;
+  margin: 10px auto;
+  display: block;
+  color: #fff;
+  background: #573b8a;
+  font-size: 1em;
+  font-weight: bold;
+  outline: none;
+  border: none;
+	border-radius: 5px;
+  transition: 0.2s ease-in;
+  cursor: pointer;
+}
+
+
+button:hover {
+  background: #6d44b8;
+}
+
+label {
+  color: #fff;
+  font-size: 2.3em;
+  justify-content: center;
+  display: flex;
+  margin: 50px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s ease-in-out;
+}
+
+input {
+  width: 200px;
+  height: 10px;
+  background: #e0dede;
+  justify-content: center;
+  display: flex;
+  margin: 20px auto;
+  padding: 12px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+/*Wrappers*/
+.vertical-button-wrapper{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.horizontal-button-wrapper{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/*Buttons*/
+.standard-button{
+  min-width: 200px;
+}
+
+.back-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 40px;
+  height: 40px;
+
+  margin: 10px;
+  display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/*Error Message*/
+.error-message {
+  text-align: center;
+}
+
+.error-message ul{
+  display: inline-block;
+  text-align: left;
+  padding-left: 0;
+  margin: 0 auto;
+}
+
+.error-message li{
+  list-style-type: disc;
+  color: #c22424;
+  font-size: 0.9em;
+}
+
+/*-----------------Index.html-----------------*/
+.header-wrapper{
+  position: absolute;
+  top: 50px;
+
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#bookImage{
+  height: 300px;
+  width: 300px;
+  margin-top: 150px;
+  margin-bottom: 30px;
+}
+
+/*-----------------Librarian-Register.html and Student-Register.html-----------------*/
 .signup-login-wrapper {
   width: 350px;
   height: 500px;
@@ -46,70 +182,6 @@ h2{
   height: 100%;
 }
 
-label {
-  color: #fff;
-  font-size: 2.3em;
-  justify-content: center;
-  display: flex;
-  margin: 50px;
-  margin-bottom: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.5s ease-in-out;
-}
-
-.error-message {
-  text-align: center;
-}
-
-.error-message ul{
-  display: inline-block;
-  text-align: left;
-  padding-left: 0;
-  margin: 0 auto;
-}
-
-.error-message li{
-  list-style-type: disc; /* Adds bullet points */
-  color: #c22424;
-  font-size: 0.9em;
-}
-
-input {
-  width: 60%;
-  height: 10px;
-  background: #e0dede;
-  justify-content: center;
-  display: flex;
-  margin: 20px auto;
-  padding: 12px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-}
-
-button {
-  width: 60%;
-  height: 40px;
-  margin: 10px auto;
-  justify-content: center;
-  display: block;
-  color: #fff;
-  background: #573b8a;
-  font-size: 1em;
-  font-weight: bold;
-  margin-top: 30px;
-  outline: none;
-  border: none;
-	border-radius: 5px;
-  transition: 0.2s ease-in;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #6d44b8;
-}
-
 .login {
   height: 460px;
   background: #eee;
@@ -123,32 +195,6 @@ button:hover {
   transform: scale(0.6);
 }
 
-.back-button {
-  all: unset;
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  width: 40px;
-  height: 40px;
-
-  display: flex;
-	justify-content: center;
-	align-items: center;
-
-  margin: 10px;
-
-  color: #fff;
-  background: #573b8a;
-  font-size: 1em;
-  font-weight: bold;
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  transition: 0.2s ease-in;
-  cursor: pointer;
-}
-
 #signupLoginCheckbox:checked ~ .login {
   transform: translateY(-500px);
 }
@@ -159,143 +205,57 @@ button:hover {
   transform: scale(0.6);
 }
 
-/*--------------------Librarian Database Styling--------------------*/
-body#librarianDatabaseBody {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: "Jost", sans-serif;
-  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-}
-
+/*-----------------Librarian-Database.html-----------------*/
 .header-container {
-  position: sticky;
+  position: fixed; /* Use fixed to anchor to viewport top */
   top: 0;
   left: 0;
-  width: calc(100%); /* Adjust for spacing */
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centers the h1 */
+  justify-content: center;
   box-sizing: border-box;
   border-bottom: 3px solid white;
-  z-index: 10;
+  z-index: 1000; /* Ensure header is above other content */
   background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+  padding: 10px 0; /* Add padding for better spacing */
 
 }
 
 .header-text {
   display: flex;
-  flex-direction: column; /* Stacks h1 and h2 vertically */
-  align-items: center; /* Centers them horizontally */
-  text-align: center; /* Ensures text itself is centered */
-}
-
-h2#librarianName {
-  color: #fff; /* Match h1 color */
-  font-size: 1.2em; /* Smaller than h1, adjust as needed */
-  margin: 5px 0 10px 0; /* Small top margin for spacing, no other margins */
-}
-
-.back-button.librarian-back-button {
-  position: absolute;
-  left: 5px; /* Adjust for spacing */
-  top: 5px;
-  margin: 0px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
 }
 
 .confirmation-message {
-  text-align: center;
-  color: #00cc00; /* Green for success */
-  font-size: 1.2em;
-  margin: 10px 0;
-  padding: 10px;
+  color: #00cc00; 
 }
 
-/*--------------------Add Book Menu Styling--------------------*/
-.add-book-wrapper {
-  width: 280px;
-  min-height: 320px;
-  background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")
-    no-repeat center/ cover;
-  border-radius: 10px;
-  box-shadow: 5px 20px 50px #000;
+.forms-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  gap: 20px;
+  width: 80%;
+  margin: 0 auto 50px auto;
 }
 
-.add-book-wrapper label{
-  color: #fff;
-  font-size: 1.5em;
-  justify-content: center;
+.management-buttons {
   display: flex;
-  margin: 20px;
-}
-
-.add-book-wrapper input {
-  width: 90%;
-  height: 10px;
-  background: #e0dede;
+  gap: 20px;
   justify-content: center;
-  display: flex;
-  margin: 20px auto;
-  padding: 12px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
+  margin-top: 50px;
+  flex-wrap: wrap;
 }
 
-.add-book-wrapper .availability-wrapper {
-  margin: 20px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px; /* Space between elements */
-  color: #fff;
+.management-buttons button {
+  width: 180px;
 }
 
-.add-book-wrapper .availability-wrapper label {
-  margin: 0;
-  font-size: 1em;
-}
 
-.add-book-wrapper .availability-wrapper input[type="radio"] {
-  width: auto; /* Override input width */
-  height: auto;
-  margin: 0 5px;
-  background: none; /* Remove background */
-}
-
-.add-book-wrapper .genre-wrapper {
-  margin: 20px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: #fff;
-}
-
-.add-book-wrapper .genre-wrapper label {
-  margin: 0;
-  font-size: 1em;
-}
-
-.add-book-wrapper .genre-wrapper select {
-  width: 60%; /* Match input width */
-  padding: 8px;
-  background: #e0dede;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  color: #000;
-}
-
-/*--------------------Librarian Database Table Styling--------------------*/
+/*Librarian Database Table Styling*/
 .scrollable-table-wrapper {
   max-height: 350px;
   overflow-y: auto;
@@ -352,21 +312,100 @@ h2#librarianName {
   width: 85px;
   height: 30px;
   white-space: nowrap;
-  margin: 5px; /* Override default button margin */
+  margin: 5px;
 }
 
-/*--------------------Librarian Database Search Menu Styling--------------------*/
-.forms-container {
+/*Librarian Database Table Styling (Edit Mode)*/
+.table-content td input {
+  width: 70%;
+  text-align: left;
+  background: #e0dede;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #000; 
+}
+
+.table-content td select {
+  width: 90%;
+  padding: 8px 12px;
+  text-align: left;
+  background: #e0dede;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #000;
+}
+
+/*Add Book Menu Styling*/
+.add-book-wrapper {
+  min-width: 290px;
+  min-height: 400px;
+  background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")
+    no-repeat center/ cover;
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 20px;
-  width: 80%;
-  margin: 0 auto 50px auto;
 }
 
+.add-book-wrapper label{
+  font-size: 1.5em;
+  margin: 20px;
+}
+
+.add-book-wrapper .availability-wrapper {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.add-book-wrapper .availability-wrapper label {
+  margin: 0;
+  font-size: 1em;
+}
+
+.add-book-wrapper .availability-wrapper input[type="radio"] {
+  width: auto; 
+  height: auto;
+  margin: 0 5px;
+  background: none; 
+}
+
+.add-book-wrapper .genre-wrapper {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.add-book-wrapper .genre-wrapper label {
+  margin: 0;
+  font-size: 1em;
+}
+
+.add-book-wrapper .genre-wrapper select {
+  width: 150px; 
+  padding: 8px;
+  background: #e0dede;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #000;
+}
+
+
+/*Search Menu Styling*/
 .search-book-wrapper {
-  width: 280px;
-  min-height: 320px;
+  min-width: 290px;
+  min-height: 400px;
   background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")
     no-repeat center/ cover;
   border-radius: 10px;
@@ -378,24 +417,8 @@ h2#librarianName {
 }
 
 .search-book-wrapper label {
-  color: #fff;
   font-size: 1.5em;
-  justify-content: center;
-  display: flex;
   margin: 20px;
-}
-
-.search-book-wrapper input {
-  width: 90%;
-  height: 10px;
-  background: #e0dede;
-  justify-content: center;
-  display: flex;
-  margin: 20px auto;
-  padding: 12px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
 }
 
 .search-book-wrapper .availability-wrapper {
@@ -434,7 +457,7 @@ h2#librarianName {
 }
 
 .search-book-wrapper .genre-wrapper select {
-  width: 60%;
+  width: 150px;
   padding: 8px;
   background: #e0dede;
   border: none;
@@ -453,29 +476,28 @@ h2#librarianName {
 
 .search-book-wrapper button[type="button"] {
   background: #cc0000; /* Red for Clear button */
-  width: 90%;
 }
 
 .search-book-wrapper button[type="button"]:hover {
   background: #ff3333; /* Lighter red on hover */
 }
 
-/*--------------------Librarian Database Table Styling In Edit Mode--------------------*/
-.table-content td input {
-  width: 70%;
-  padding: 8px 12px;
-  text-align: left;
-  background: #e0dede;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  color: #000; /* Black text for visibility */
+/*-----------------Librarian-Requests.html-----------------*/
+.due-date-wrapper {
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
 }
 
-.table-content td select {
-  width: 90%;
-  padding: 8px 12px;
-  text-align: left;
+.due-date-wrapper label {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.due-date-wrapper input[type="date"] {
+  padding: 8px;
   background: #e0dede;
   border: none;
   outline: none;
@@ -483,35 +505,246 @@ h2#librarianName {
   color: #000;
 }
 
+.requests-list {
+  width: 80%;
+  margin: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
+  max-height: 460px;
+  overflow-y: auto;
+}
 
-.table-content td button:hover {
+.request-section {
+  margin-bottom: 20px;
+}
+
+.request-section h3 {
+  color: #fff;
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+}
+
+.request-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.request-item {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.request-item:last-child {
+  border-bottom: none;
+}
+
+.request-details {
+  color: #fff;
+  font-size: 1em;
+  text-align: left;
+}
+
+.request-details p {
+  margin: 5px 0;
+  text-align: left;
+}
+
+.request-details strong {
+  color: #ddd;
+}
+
+.request-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.request-actions button {
+  width: 90px;
+  height: 35px;
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+}
+
+.request-actions button:first-child {
+  background: #00cc00; /* Green for Approve */
+}
+
+.request-actions button:first-child:hover {
+  background: #00e600;
+}
+
+.request-actions button:last-child {
+  background: #cc0000; /* Red for Decline */
+}
+
+.request-actions button:last-child:hover {
+  background: #ff3333;
+}
+
+/*-----------------Librarian-Borrowed-Books.html-----------------*/
+.borrowed-books-list {
+  width: 80%;
+  max-width: 80%;
+  margin: 20px auto;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.borrowed-section {
+  margin-bottom: 20px;
+}
+
+.borrowed-section h3 {
+  color: #fff;
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+}
+
+.borrowed-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.borrowed-item {
+  display: grid;
+  grid-template-columns: 1fr 300px; /* Details on left, actions on right */
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.borrowed-item:last-child {
+  border-bottom: none;
+}
+
+.borrowed-details {
+  color: #fff;
+  font-size: 1em;
+}
+
+.borrowed-details p {
+  margin: 5px 0;
+  text-align: left;
+}
+
+.borrowed-details strong {
+  color: #ddd;
+}
+
+.borrowed-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* Allow buttons to wrap if needed */
+}
+
+
+.button-return {
+  background: #00cc00;
+}
+.button-payment {
+  background: #ff9900;
+}
+.button-payment-return {
+  background: #0066cc;
+}
+
+.button-return:hover {
+  background: #00e600;
+}
+.button-payment:hover {
+  background: #ffbb33;
+}
+.button-payment-return:hover {
+  background: #0088ff;
+}
+
+/*-----------------Librarian-Issue-Book.html-----------------*/
+.issue-book-form {
+  width: 80%;
+  max-width: 500px;
+  margin: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
+  color: #fff;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group select,
+.form-group input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background: #333;
+  color: #fff;
+  font-size: 1em;
+}
+
+.form-group select:focus,
+.form-group input[type="date"]:focus {
+  outline: none;
+  background: #444;
+}
+
+.issue-book-form button {
+  width: 100%;
+  height: 40px;
+  background: #573b8a;
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+}
+
+.issue-book-form button:hover {
   background: #6d44b8;
 }
 
-/*--------------------Student Database Styling--------------------*/
-body#studentDatabaseBody {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: "Jost", sans-serif;
-  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-}
 
+/*-----------------Student-Database.html-----------------*/
 .header-container {
-  position: sticky; /* Changed to fixed to stay at top */
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Spread content */
+  justify-content: space-between;
   box-sizing: border-box;
   padding: 10px 20px;
-  z-index: 1000; /* Above other content */
+  z-index: 1000;
   background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
   border-bottom: 3px solid white;
 }
@@ -520,7 +753,7 @@ body#studentDatabaseBody {
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-grow: 1; /* Take available space */
+  flex-grow: 1;
 }
 
 .welcome-fines-container {
@@ -531,12 +764,6 @@ body#studentDatabaseBody {
   margin: 5px 0;
 }
 
-h2#studentName {
-  color: #fff;
-  font-size: 1.2em;
-  margin: 0; /* Override h2 default */
-  text-align: left; /* Align with fines */
-}
 
 .fines-display {
   font-size: 1.2em;
@@ -544,21 +771,6 @@ h2#studentName {
   margin: 0;
   text-align: left; /* Align with welcome */
   white-space: nowrap; /* Prevent wrapping */
-}
-
-.back-button.student-back-button {
-  position: absolute;
-  left: 5px; /* Adjust for spacing */
-  top: 5px;
-  margin: 0px;
-}
-
-.confirmation-message {
-  font-size: 1.2em;
-  color: #00cc00; /* Default green, overridden by JS */
-  margin: 5px 0 0 0;
-  text-align: center;
-  width: 100%; /* Ensure it spans below */
 }
 
 /*--------------------Student Database Table Styling--------------------*/
@@ -697,24 +909,28 @@ h2#studentName {
   text-align: left;
 }
 
-/*--------------------Student Database Borrowed Books Styling--------------------*/
+/* Student Database Borrowed Books Styling */
 .borrowed-books-list {
-  width: 100%; /* Adjusted to fit within section */
+  width: 80%;
+  max-width: 80%;
+  margin: 20px auto;
   padding: 15px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   box-shadow: 5px 20px 50px #000;
   max-height: 400px;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .borrowed-book-item {
   display: grid;
-  grid-template-columns: 1fr auto; /* Left details take space, right status/fines shrink to fit */
-  align-items: start; /* Align content at the top */
+  grid-template-columns: 1fr auto;
+  align-items: start;
   padding: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  max-width: 100%;
 }
 
 .borrowed-book-item:last-child {
@@ -724,6 +940,8 @@ h2#studentName {
 .borrowed-book-item .book-details {
   color: #fff;
   font-size: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .borrowed-book-item .book-details p {
@@ -735,9 +953,10 @@ h2#studentName {
 }
 
 .borrowed-book-item .status-fines {
-  text-align: right; /* Right-align status and fine */
+  text-align: right;
   color: #fff;
   font-size: 1em;
+  min-width: 100px; /* Match requested-book-item button */
 }
 
 .borrowed-book-item .status-fines p {
@@ -745,117 +964,69 @@ h2#studentName {
 }
 
 .borrowed-book-item .status-fines .overdue-status strong {
-  color: #ddd; /* Match book-details strong */
+  color: #ddd;
 }
 
 .borrowed-book-item .status-fines .book-fine {
-  color: #fff; /* White by default, overridden for overdue */
+  color: #fff;
 }
 
 .borrowed-book-item .status-fines .book-fine.overdue {
-  color: red; /* Red if fine > 0 */
+  color: red;
 }
 
 .borrowed-book-item .status-fines .book-fine strong {
   color: #ddd;
 }
 
-
-
-
-/*--------------------Librarian Requests Styling--------------------*/
-body#librarianRequestsBody {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  font-family: "Jost", sans-serif;
-  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-}
-
-.due-date-wrapper {
-  margin: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #fff;
-}
-
-.due-date-wrapper label {
-  font-size: 1.2em;
-}
-
-.due-date-wrapper input[type="date"] {
-  padding: 8px;
-  background: #e0dede;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  color: #000;
-}
-
-.requests-list {
+/* Student Database Request Book Styling */
+.requested-books-list {
   width: 80%;
-  margin: 20px;
+  max-width: 80%;
+  margin: 20px auto;
   padding: 15px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   box-shadow: 5px 20px 50px #000;
-  max-height: 500px;
+  max-height: 400px;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
-.request-section {
-  margin-bottom: 20px;
-}
-
-.request-section h3 {
-  color: #fff;
-  font-size: 1.5em;
-  margin: 0 0 10px 0;
-}
-
-.request-items {
-  display: flex;
-  flex-direction: column;
-}
-
-.request-item {
+.requested-book-item {
   display: grid;
-  grid-template-columns: 1fr 200px;
+  grid-template-columns: 1fr 100px;
   align-items: center;
   padding: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  max-width: 100%;
 }
 
-.request-item:last-child {
+.requested-book-item:last-child {
   border-bottom: none;
 }
 
-.request-details {
+.book-details {
   color: #fff;
   font-size: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.request-details p {
+.book-details p {
   margin: 5px 0;
+  text-align: left;
 }
 
-.request-details strong {
+.book-details strong {
   color: #ddd;
 }
 
-.request-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.request-actions button {
-  width: 90px;
+.requested-book-item button {
+  width: 100px;
   height: 35px;
+  background: #cc0000;
   color: #fff;
   font-size: 1em;
   font-weight: bold;
@@ -865,238 +1036,13 @@ body#librarianRequestsBody {
   transition: 0.2s ease-in;
 }
 
-.request-actions button:first-child {
-  background: #00cc00; /* Green for Approve */
-}
-
-.request-actions button:first-child:hover {
-  background: #00e600;
-}
-
-.request-actions button:last-child {
-  background: #cc0000; /* Red for Decline */
-}
-
-.request-actions button:last-child:hover {
+.requested-book-item button:hover {
   background: #ff3333;
 }
 
-/*--------------------Librarian Borrowed Books Styling--------------------*/
-body#librarianBorrowedBooksBody {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  font-family: "Jost", sans-serif;
-  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-}
 
-.borrowed-books-list {
-  width: 80%;
-  margin: 20px;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  box-shadow: 5px 20px 50px #000;
-  max-height: 500px;
-  overflow-y: auto;
-}
 
-.borrowed-section {
-  margin-bottom: 20px;
-}
 
-.borrowed-section h3 {
-  color: #fff;
-  font-size: 1.5em;
-  margin: 0 0 10px 0;
-}
-
-.borrowed-items {
-  display: flex;
-  flex-direction: column;
-}
-
-.borrowed-item {
-  display: grid;
-  grid-template-columns: 1fr 300px; /* Details on left, actions on right */
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.borrowed-item:last-child {
-  border-bottom: none;
-}
-
-.borrowed-details {
-  color: #fff;
-  font-size: 1em;
-}
-
-.borrowed-details p {
-  margin: 5px 0;
-}
-
-.borrowed-details strong {
-  color: #ddd;
-}
-
-.borrowed-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap; /* Allow buttons to wrap if needed */
-}
-
-.borrowed-actions button {
-  width: 90px;
-  height: 35px;
-  color: #fff;
-  font-size: 0.9em;
-  font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.2s ease-in;
-}
-
-.borrowed-actions button:nth-child(1) {
-  background: #00cc00; /* Green for Confirm Return */
-}
-
-.borrowed-actions button:nth-child(1):hover {
-  background: #00e600;
-}
-
-.borrowed-actions button:nth-child(2) {
-  background: #ff9900; /* Orange for Confirm Payment */
-}
-
-.borrowed-actions button:nth-child(2):hover {
-  background: #ffbb33;
-}
-
-.borrowed-actions button:nth-child(3) {
-  background: #0066cc; /* Blue for Confirm Payment & Return */
-}
-
-.borrowed-actions button:nth-child(3):hover {
-  background: #0088ff;
-}
-
-/* Style for management buttons in librarianDatabase */
-.management-buttons {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin: 10px 0;
-}
-
-.management-buttons button {
-  width: 200px;
-  height: 40px;
-  background: #573b8a;
-}
-
-.management-buttons button:hover {
-  background: #6d44b8;
-}
-
-/* Librarian Issue Book Styling */
-body#librarianIssueBookBody {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  font-family: "Jost", sans-serif;
-  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-}
-
-.issue-book-form {
-  width: 80%;
-  max-width: 500px;
-  margin: 20px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  box-shadow: 5px 20px 50px #000;
-  color: #fff;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-group select,
-.form-group input[type="date"] {
-  width: 100%;
-  padding: 8px;
-  border: none;
-  border-radius: 5px;
-  background: #333;
-  color: #fff;
-  font-size: 1em;
-}
-
-.form-group select:focus,
-.form-group input[type="date"]:focus {
-  outline: none;
-  background: #444;
-}
-
-.issue-book-form button {
-  width: 100%;
-  height: 40px;
-  background: #573b8a;
-  color: #fff;
-  font-size: 1em;
-  font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.2s ease-in;
-}
-
-.issue-book-form button:hover {
-  background: #6d44b8;
-}
-
-/* Ensure management-buttons style supports three buttons */
-.management-buttons {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin: 10px 0;
-  flex-wrap: wrap;
-}
-
-.management-buttons button {
-  width: 180px;
-  height: 40px;
-  background: #573b8a;
-  color: #fff;
-  font-size: 0.9em;
-  font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.2s ease-in;
-}
-
-.management-buttons button:hover {
-  background: #6d44b8;
-}
 
 /*--------------------Scrollbar Styling--------------------*/
  /* width */

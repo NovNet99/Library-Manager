@@ -9,7 +9,7 @@
   <title>Librarian Database</title>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet" />
 </head>
-<body id="librarianDatabaseBody">
+<body class="standard-body-layout">
   <div class="header-container">
     <button id="backButton" class="back-button librarian-back-button">
       <i class="fas fa-arrow-left"></i>
@@ -17,14 +17,15 @@
     <div class="header-text">
       <h1>Library Database</h1>
       <h2 id="librarianName"></h2>
+      <p id="confirmationMessage" class="confirmation-message"></p>
     </div>
   </div>
 
-  <p id="confirmationMessage" class="confirmation-message"></p>
+  
 
   <div class="management-buttons">
-    <button id="manageRequestsButton">Manage Requests</button>
-    <button id="manageBorrowedBooksButton">Manage Borrowed Books</button>
+    <button id="manageRequestsButton">Borrow Requests</button>
+    <button id="manageBorrowedBooksButton">Borrowed Books</button>
     <button id="issueBookButton">Issue Book</button>
   </div>
 
@@ -104,8 +105,10 @@
           <input type="radio" name="searchAvailability" value="false" id="searchAvailableNo" />
           <label for="searchAvailableNo">No</label>
         </div>
-        <button type="submit">Search</button>
-        <button type="button" id="clearSearchButton">Clear</button>
+        <div class="horizontal-button-wrapper">
+          <button type="submit">Search</button>
+          <button type="button" id="clearSearchButton">Clear</button>
+        </div>
       </form>
     </div>
   </div>

@@ -17,9 +17,9 @@ let librarian = null;
 let student = null;
 
 //The path to the JSON file where book data is stored.
-const bookDataFilePath = path.join(__dirname, "../books1.json");
-const requestsFilePath = path.join(__dirname, "../requests.json");
-const borrowedBooksFilePath = path.join(__dirname, "../borrowedBooks.json");
+const bookDataFilePath = path.join(__dirname, "../data/books.json");
+const requestsFilePath = path.join(__dirname, "../data/requests.json");
+const borrowedBooksFilePath = path.join(__dirname, "../data/borrowedBooks.json");
 
 const ensureFileExists = (filePath, defaultContent) => {
   if (!fs.existsSync(filePath)) {
@@ -37,7 +37,7 @@ if (!fs.existsSync(bookDataDir)) {
   fs.mkdirSync(bookDataDir, { recursive: true });
 }
 
-process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "production";
 const isDev = process.env.NODE_ENV !== "production";
 
 let mainWindow;
@@ -47,8 +47,8 @@ let mainWindow;
 //Creates the initial window when loading the application.
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    width: isDev ? 1300 : 800,
-    height: 600,
+    width: isDev ? 1920 : 800,
+    height: 1080,
     webPreferences: {
       //Loads preload.js to expose safe APIs for the renderer process.
       preload: path.join(__dirname, "preload.js"),

@@ -15,19 +15,18 @@
       content="default-src 'self'; script-src 'self'"
     />
     <script defer src="../ui/renderer.js"></script>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styling.css" />
     <title>Library Manager</title>
   </head>
-  <body>
-    <div class="header-container">
+  <body class="standard-body-layout">
+    <div class="header-wrapper">
       <h1>Library Management Software</h1>
+      <p id="versionInfo"></p>
     </div>
-    <p id="versionInfo"></p>
-    <button id="enterAppBtn" class="dark-button" type="button">
-      Admin Enter Application
-    </button>
-    <button id="userEnterAppBtn" class="dark-button" type="button">
-      User Enter Application
-    </button>
+    <img src="../images/book-image.png" alt="Book Logo" id="bookImage">
+    <div class="vertical-button-wrapper">
+      <button id="studentAccessButton" class="standard-button" type="button">Student Access</button>
+      <button id="librarianAccessButton" class="standard-button" type="button">Librarian Access</button>
+    </div>
   </body>
 </html>

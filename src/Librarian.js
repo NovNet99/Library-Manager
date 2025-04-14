@@ -7,10 +7,10 @@ class Librarian {
     this.userName = userName;
     this.librarianCode = librarianCode;
     this.database = database;
-    this.requestsFilePath = path.join(__dirname, "../requests.json");
-    this.borrowedBooksFilePath = path.join(__dirname, "../borrowedBooks.json");
-    this.finesFilePath = path.resolve(__dirname, "../fines.json");
-    this.usersFilePath = path.resolve(__dirname, "../students.json");
+    this.requestsFilePath = path.join(__dirname, "../data/requests.json");
+    this.borrowedBooksFilePath = path.join(__dirname, "../data/borrowedBooks.json");
+    this.finesFilePath = path.resolve(__dirname, "../data/fines.json");
+    this.usersFilePath = path.resolve(__dirname, "../data/students.json");
   }
 
   addBook(title, author, isbn, available, genre) {
@@ -36,20 +36,30 @@ class Librarian {
 
   getAllRequests() {
     try {
+      //If the filepath exists, sets requests to its data. Otherwise, sets requests to an empty object.
       const requests = fs.existsSync(this.requestsFilePath)
         ? JSON.parse(fs.readFileSync(this.requestsFilePath, "utf-8"))
         : {};
+        //Gets all the books in the database.
       const books = this.database.getBooks();
+      const allRequests = [];
+      //Iterates over each username in the requests object.
       Object.keys(requests).forEach((username) => {
-        requests[username] = requests[username].map((req) => {
+        //For each username, iterates over their array of requests.
+        requests[username].forEach((req) => {
           const book = books.find((b) => b.isbn === req.isbn) || {};
-          return { ...req, author: book.author, genre: book.genre };
+          allRequests.push({
+            ...req,
+            author: book.author,
+            genre: book.genre,
+            username,
+          });
         });
       });
-      return requests;
+      return allRequests;
     } catch (error) {
       console.error("Error fetching all requests:", error.message);
-      return {};
+      return [];
     }
   }
 
@@ -58,13 +68,18 @@ class Librarian {
       const requests = fs.existsSync(this.requestsFilePath)
         ? JSON.parse(fs.readFileSync(this.requestsFilePath, "utf-8"))
         : {};
+      //Gets the requests for that specific student.
       const studentRequests = requests[username] || [];
+      //Gets the index of the approved book in the requests.
       const requestIndex = studentRequests.findIndex((req) => req.isbn === isbn);
       if (requestIndex === -1) return { success: false, message: "Request not found." };
+      //Removes the request from the request list for that student.
       const [request] = studentRequests.splice(requestIndex, 1);
+      //Refreshes that students requests and writes it to the request file.
       requests[username] = studentRequests;
       fs.writeFileSync(this.requestsFilePath, JSON.stringify(requests, null, 2));
 
+      //Gets the borrowed books for that specific student and pushes the borrowed book to that list.
       const borrowedBooks = fs.existsSync(this.borrowedBooksFilePath)
         ? JSON.parse(fs.readFileSync(this.borrowedBooksFilePath, "utf-8"))
         : {};
@@ -75,6 +90,7 @@ class Librarian {
         approvalDate: new Date().toISOString().split("T")[0], // YYYY-MM-DD format
         dueDate: dueDate,
       });
+      //Saves (writes) the updated borrowed books to the file.
       fs.writeFileSync(this.borrowedBooksFilePath, JSON.stringify(borrowedBooks, null, 2));
 
       /*const book = this.database.getBookByIsbn(isbn);
@@ -92,6 +108,8 @@ class Librarian {
 
   declineRequest(username, isbn) {
     try {
+      //Gets the students requests list and removes the declined request from the list.
+      //Updates the file.
       const requests = fs.existsSync(this.requestsFilePath)
         ? JSON.parse(fs.readFileSync(this.requestsFilePath, "utf-8"))
         : {};
@@ -113,25 +131,24 @@ class Librarian {
       const borrowedBooks = fs.existsSync(this.borrowedBooksFilePath)
         ? JSON.parse(fs.readFileSync(this.borrowedBooksFilePath, "utf-8"))
         : {};
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Normalize to midnight
+      const books = this.database.getBooks(); // Load book details
+      const allBorrowedBooks = [];
       Object.keys(borrowedBooks).forEach((username) => {
-        borrowedBooks[username] = borrowedBooks[username].map((book) => {
-          const dueDate = new Date(book.dueDate);
-          dueDate.setHours(0, 0, 0, 0);
-          const timeDiff = dueDate - today;
-          const daysUntilDue = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-          let fine = 0;
-          if (daysUntilDue < 0) {
-            fine = Math.abs(daysUntilDue) * 5; // $5 per day overdue
-          }
-          return { ...book, daysUntilDue, fine };
+        const booksWithFines = this.database.calculateBooksWithFines(borrowedBooks[username]);
+        booksWithFines.forEach((book) => {
+          const bookDetails = books.find((b) => b.isbn === book.isbn) || {};
+          allBorrowedBooks.push({
+            ...book,
+            author: bookDetails.author || "",
+            genre: bookDetails.genre || "",
+            username,
+          });
         });
       });
-      return borrowedBooks;
+      return allBorrowedBooks;
     } catch (error) {
       console.error("Error fetching borrowed books:", error.message);
-      return {};
+      return [];
     }
   }
 
@@ -146,18 +163,13 @@ class Librarian {
         return { success: false, message: "Book not found in borrowed list." };
       }
       const book = studentBooks[bookIndex];
-      const dueDate = new Date(book.dueDate);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      dueDate.setHours(0, 0, 0, 0);
-      const daysUntilDue = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
-      if (daysUntilDue < 0) {
+      const fine = this.database.calculateBookFine(book);
+      if (fine > 0) {
         return { success: false, message: "Cannot return book: Outstanding fines must be cleared." };
       }
-      studentBooks.splice(bookIndex, 1); // Remove book
+      studentBooks.splice(bookIndex, 1);
       borrowedBooks[username] = studentBooks;
       fs.writeFileSync(this.borrowedBooksFilePath, JSON.stringify(borrowedBooks, null, 2));
-      // Update book availability
       const dbBook = this.database.getBookByIsbn(isbn);
       if (dbBook) {
         dbBook.available = true;
@@ -180,14 +192,12 @@ class Librarian {
       if (bookIndex === -1) {
         return { success: false, message: "Book not found in borrowed list." };
       }
-      // Extend due date to 2 days from today
       const newDueDate = new Date();
       newDueDate.setDate(newDueDate.getDate() + 2);
       studentBooks[bookIndex].dueDate = newDueDate.toISOString().split("T")[0];
       borrowedBooks[username] = studentBooks;
       fs.writeFileSync(this.borrowedBooksFilePath, JSON.stringify(borrowedBooks, null, 2));
-      // Clear fines for this book by recalculating total fines
-      const fines = this.calculateFinesForStudent(username);
+      const fines = this.database.calculateTotalFines(studentBooks);
       const finesData = fs.existsSync(this.finesFilePath)
         ? JSON.parse(fs.readFileSync(this.finesFilePath, "utf-8"))
         : {};
@@ -211,17 +221,15 @@ class Librarian {
         return { success: false, message: "Book not found in borrowed list." };
       }
       const book = studentBooks[bookIndex];
-      studentBooks.splice(bookIndex, 1); // Remove book
+      studentBooks.splice(bookIndex, 1);
       borrowedBooks[username] = studentBooks;
       fs.writeFileSync(this.borrowedBooksFilePath, JSON.stringify(borrowedBooks, null, 2));
-      // Clear fines for this book by recalculating total fines
-      const fines = this.calculateFinesForStudent(username);
+      const fines = this.database.calculateTotalFines(studentBooks);
       const finesData = fs.existsSync(this.finesFilePath)
         ? JSON.parse(fs.readFileSync(this.finesFilePath, "utf-8"))
         : {};
       finesData[username] = fines;
       fs.writeFileSync(this.finesFilePath, JSON.stringify(finesData, null, 2));
-      // Update book availability
       const dbBook = this.database.getBookByIsbn(isbn);
       if (dbBook) {
         dbBook.available = true;
@@ -239,19 +247,7 @@ class Librarian {
       ? JSON.parse(fs.readFileSync(this.borrowedBooksFilePath, "utf-8"))
       : {};
     const studentBooks = borrowedBooks[username] || [];
-    let totalFines = 0;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    studentBooks.forEach((book) => {
-      const dueDate = new Date(book.dueDate);
-      dueDate.setHours(0, 0, 0, 0);
-      const timeDiff = today - dueDate;
-      if (timeDiff > 0) {
-        const daysOverdue = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        totalFines += daysOverdue * 5; // $5 per day overdue
-      }
-    });
-    return totalFines;
+    return this.database.calculateTotalFines(studentBooks);
   }
 
   getAllStudents() {
@@ -278,7 +274,7 @@ class Librarian {
       if (!username || !isbn || !dueDate) {
         return { success: false, message: "Username, ISBN, and due date are required." };
       }
-
+  
       // Check fines
       if (!this.finesFilePath || typeof this.finesFilePath !== "string") {
         throw new Error("Invalid finesFilePath");
@@ -290,8 +286,8 @@ class Librarian {
       if (userFines > 0) {
         return { success: false, message: "Cannot issue book: User has outstanding fines." };
       }
-
-      // Check book availability
+  
+      // Check book existence and availability
       const book = this.database.getBookByIsbn(isbn);
       if (!book) {
         return { success: false, message: "Book not found." };
@@ -299,7 +295,19 @@ class Librarian {
       if (!book.available) {
         return { success: false, message: "Book is not available." };
       }
-
+  
+      // Check if user already borrowed the book
+      if (!this.borrowedBooksFilePath || typeof this.borrowedBooksFilePath !== "string") {
+        throw new Error("Invalid borrowedBooksFilePath");
+      }
+      const borrowedBooks = fs.existsSync(this.borrowedBooksFilePath)
+        ? JSON.parse(fs.readFileSync(this.borrowedBooksFilePath, "utf-8"))
+        : {};
+      borrowedBooks[username] = borrowedBooks[username] || [];
+      if (borrowedBooks[username].some((b) => b.isbn === isbn)) {
+        return { success: false, message: "Cannot issue book: User already has this book borrowed." };
+      }
+  
       // Validate due date
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -308,15 +316,22 @@ class Librarian {
       if (selectedDueDate < today) {
         return { success: false, message: "Due date cannot be in the past." };
       }
-
-      // Update borrowedBooks.json
-      if (!this.borrowedBooksFilePath || typeof this.borrowedBooksFilePath !== "string") {
-        throw new Error("Invalid borrowedBooksFilePath");
+  
+      // Remove pending request if it exists
+      if (!this.requestsFilePath || typeof this.requestsFilePath !== "string") {
+        throw new Error("Invalid requestsFilePath");
       }
-      const borrowedBooks = fs.existsSync(this.borrowedBooksFilePath)
-        ? JSON.parse(fs.readFileSync(this.borrowedBooksFilePath, "utf-8"))
+      const requests = fs.existsSync(this.requestsFilePath)
+        ? JSON.parse(fs.readFileSync(this.requestsFilePath, "utf-8"))
         : {};
-      borrowedBooks[username] = borrowedBooks[username] || [];
+      requests[username] = requests[username] || [];
+      const requestIndex = requests[username].findIndex((req) => req.isbn === isbn);
+      if (requestIndex !== -1) {
+        requests[username].splice(requestIndex, 1);
+        fs.writeFileSync(this.requestsFilePath, JSON.stringify(requests, null, 2));
+      }
+  
+      // Update borrowedBooks.json
       borrowedBooks[username].push({
         title: book.title,
         isbn: book.isbn,
@@ -324,11 +339,11 @@ class Librarian {
         dueDate: dueDate,
       });
       fs.writeFileSync(this.borrowedBooksFilePath, JSON.stringify(borrowedBooks, null, 2));
-
+  
       // Update book availability
-      //book.available = false;
+      book.available = false;
       this.database.saveBooks();
-
+  
       return { success: true, message: `Book ${book.title} issued to ${username} successfully.` };
     } catch (error) {
       console.error("Error issuing book:", error.message);
